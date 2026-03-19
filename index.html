@@ -7,96 +7,150 @@
 <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Secular+One&display=swap" rel="stylesheet">
 <style>
   :root {
-    --parchment: #f5e6c8;
-    --parchment-dark: #e8d5a3;
-    --parchment-darker: #d4b97a;
-    --ink: #2c1a0e;
-    --ink-light: #5c3d1e;
-    --ink-faint: #8b6340;
-    --red-accent: #8b1a1a;
-    --gold: #b8860b;
-    --gold-light: #d4a017;
-    --green-done: #2d5a1b;
-    --shadow: rgba(44, 26, 14, 0.25);
-    --border: #c4a45a;
+    --bg-deep:    #080f1e;
+    --bg-card:    #0d1a2f;
+    --bg-card2:   #112240;
+    --border:     #1e3a5f;
+    --border-glow:#2a5298;
+    --gold:       #f0c040;
+    --gold-dim:   #a07c20;
+    --star:       #e8d68a;
+    --text:       #d8e8ff;
+    --text-dim:   #7a9fc0;
+    --text-faint: #3a5878;
+    --green:      #2ecc71;
+    --green-dark: #1a7a44;
+    --red:        #e74c6e;
+    --accent:     #4a90d9;
+    --accent2:    #7b5ea7;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     font-family: 'Frank Ruhl Libre', serif;
-    background-color: #2c1a0e;
+    background-color: var(--bg-deep);
     background-image:
-      radial-gradient(ellipse at 20% 20%, rgba(139,99,32,0.15) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 80%, rgba(100,60,20,0.2) 0%, transparent 60%),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+      radial-gradient(ellipse at 50% 0%, rgba(42,82,152,0.35) 0%, transparent 65%),
+      radial-gradient(ellipse at 20% 80%, rgba(123,94,167,0.2) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 40%, rgba(74,144,217,0.15) 0%, transparent 45%);
     min-height: 100vh;
-    padding: 20px;
+    padding: 20px 16px 40px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Stars */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, rgba(232,214,138,0.9) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 8%,  rgba(232,214,138,0.7) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 40% 22%, rgba(232,214,138,0.8) 0%, transparent 100%),
+      radial-gradient(1px 1px at 55% 5%,  rgba(232,214,138,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 18%, rgba(232,214,138,0.9) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 82% 10%, rgba(232,214,138,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 92% 25%, rgba(232,214,138,0.8) 0%, transparent 100%),
+      radial-gradient(1px 1px at 5%  40%, rgba(232,214,138,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 15% 55%, rgba(232,214,138,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 88% 50%, rgba(232,214,138,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 95% 70%, rgba(232,214,138,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 30% 75%, rgba(232,214,138,0.4) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 60% 85%, rgba(232,214,138,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 92%, rgba(232,214,138,0.5) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
   }
 
   .page-wrapper {
-    max-width: 860px;
+    max-width: 820px;
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
   }
 
-  /* HEADER */
+  /* ─── HEADER ─── */
   .site-header {
     text-align: center;
-    padding: 36px 24px 24px;
-    position: relative;
+    padding: 28px 16px 20px;
   }
 
-  .site-header::before, .site-header::after {
-    content: '';
+  .header-moon {
+    font-size: 2.8rem;
     display: block;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent);
-    margin: 8px 0;
+    margin-bottom: 6px;
+    filter: drop-shadow(0 0 12px rgba(240,192,64,0.7));
   }
 
   .site-header h1 {
     font-family: 'Secular One', sans-serif;
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    color: var(--parchment);
-    letter-spacing: 0.04em;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    margin: 12px 0 4px;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    color: var(--gold);
+    letter-spacing: 0.06em;
+    text-shadow: 0 0 24px rgba(240,192,64,0.5), 0 2px 4px rgba(0,0,0,0.8);
+    margin-bottom: 6px;
   }
 
   .site-header .subtitle {
-    font-size: 1rem;
-    color: var(--parchment-darker);
-    opacity: 0.85;
-    letter-spacing: 0.05em;
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
   }
 
-  /* GLOBAL PROGRESS */
-  .global-progress {
-    background: linear-gradient(135deg, var(--parchment) 0%, var(--parchment-dark) 100%);
-    border: 2px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 28px;
-    margin: 20px 0;
-    box-shadow: 0 4px 20px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.4);
+  .header-divider {
     display: flex;
     align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
+    gap: 12px;
+    margin: 16px 0;
+    color: var(--gold-dim);
+    font-size: 0.8rem;
+  }
+  .header-divider::before, .header-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
   }
 
-  .global-progress .label {
+  /* ─── GLOBAL PROGRESS ─── */
+  .global-card {
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-card2) 100%);
+    border: 1px solid var(--border-glow);
+    border-radius: 16px;
+    padding: 18px 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 0 24px rgba(42,82,152,0.25), 0 4px 12px rgba(0,0,0,0.4);
+  }
+
+  .global-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+
+  .global-label {
     font-family: 'Secular One', sans-serif;
-    font-size: 1.1rem;
-    color: var(--ink);
+    font-size: 1rem;
+    color: var(--gold);
     flex-shrink: 0;
   }
 
+  .global-pct {
+    font-family: 'Secular One', sans-serif;
+    font-size: 1.4rem;
+    color: var(--green);
+    margin-right: auto;
+    text-shadow: 0 0 10px rgba(46,204,113,0.4);
+  }
+
   .progress-bar-wrap {
-    flex: 1;
-    min-width: 200px;
-    background: rgba(44,26,14,0.15);
+    width: 100%;
+    height: 14px;
+    background: rgba(255,255,255,0.06);
     border-radius: 100px;
-    height: 18px;
     overflow: hidden;
     border: 1px solid var(--border);
   }
@@ -104,396 +158,380 @@
   .progress-bar-fill {
     height: 100%;
     border-radius: 100px;
-    background: linear-gradient(90deg, var(--green-done), #4a8a2a);
-    transition: width 0.5s ease;
+    background: linear-gradient(90deg, var(--green-dark), var(--green));
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+    box-shadow: 0 0 8px rgba(46,204,113,0.5);
     position: relative;
   }
 
   .progress-bar-fill::after {
     content: '';
     position: absolute;
-    top: 2px; left: 4px; right: 4px;
-    height: 5px;
-    background: rgba(255,255,255,0.25);
+    top: 2px; left: 4px; right: 4px; height: 4px;
+    background: rgba(255,255,255,0.2);
     border-radius: 100px;
   }
 
-  .progress-pct {
-    font-family: 'Secular One', sans-serif;
-    font-size: 1.3rem;
-    color: var(--red-accent);
-    min-width: 52px;
-    text-align: left;
-  }
-
   .global-stats {
-    font-size: 0.85rem;
-    color: var(--ink-faint);
-    width: 100%;
     text-align: center;
-    margin-top: -6px;
+    font-size: 0.8rem;
+    color: var(--text-faint);
+    margin-top: 8px;
   }
 
-  /* CONTROLS */
+  /* ─── CONTROLS ─── */
   .controls {
     display: flex;
-    gap: 10px;
-    margin: 0 0 20px;
+    gap: 8px;
+    margin-bottom: 18px;
     flex-wrap: wrap;
     justify-content: center;
   }
 
   .btn {
     font-family: 'Frank Ruhl Libre', serif;
-    font-size: 0.9rem;
-    padding: 8px 18px;
-    border-radius: 6px;
+    font-size: 0.88rem;
+    padding: 8px 16px;
+    border-radius: 8px;
     cursor: pointer;
-    border: 1.5px solid var(--border);
-    background: linear-gradient(135deg, var(--parchment) 0%, var(--parchment-dark) 100%);
-    color: var(--ink);
+    border: 1px solid var(--border-glow);
+    background: linear-gradient(135deg, var(--bg-card2) 0%, var(--bg-card) 100%);
+    color: var(--text);
     transition: all 0.2s;
-    box-shadow: 0 2px 6px var(--shadow);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    white-space: nowrap;
   }
 
   .btn:hover {
-    background: linear-gradient(135deg, var(--parchment-dark) 0%, var(--parchment-darker) 100%);
+    border-color: var(--gold-dim);
+    color: var(--gold);
+    box-shadow: 0 0 12px rgba(240,192,64,0.15), 0 2px 8px rgba(0,0,0,0.4);
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px var(--shadow);
   }
 
   .btn-danger {
-    border-color: var(--red-accent);
-    color: var(--red-accent);
+    border-color: rgba(231,76,110,0.4);
+    color: var(--red);
   }
 
-  /* DAYS */
-  .days-container {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+  .btn-danger:hover {
+    border-color: var(--red);
+    color: var(--red);
+    box-shadow: 0 0 12px rgba(231,76,110,0.2);
   }
+
+  /* ─── DAY CARDS ─── */
+  .days-container { display: flex; flex-direction: column; gap: 10px; }
 
   .day-card {
-    background: linear-gradient(160deg, var(--parchment) 0%, var(--parchment-dark) 100%);
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-card2) 100%);
+    border: 1px solid var(--border);
+    border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 3px 14px var(--shadow);
-    transition: box-shadow 0.2s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.35);
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
 
-  .day-card:hover {
-    box-shadow: 0 5px 20px var(--shadow);
-  }
+  .day-card:hover { border-color: var(--border-glow); }
 
   .day-card.completed {
-    border-color: var(--green-done);
-    background: linear-gradient(160deg, #eef5e8 0%, #ddecd0 100%);
+    border-color: var(--green-dark);
+    background: linear-gradient(135deg, #0a1f12 0%, #0d2b18 100%);
+    box-shadow: 0 0 16px rgba(46,204,113,0.12), 0 2px 10px rgba(0,0,0,0.35);
   }
 
   .day-card.bookmarked {
-    border-color: var(--red-accent);
-    box-shadow: 0 0 0 2px rgba(139,26,26,0.2), 0 3px 14px var(--shadow);
+    border-color: var(--gold-dim);
+    box-shadow: 0 0 20px rgba(240,192,64,0.2), 0 2px 10px rgba(0,0,0,0.35);
   }
 
-  /* DAY HEADER */
+  /* ─── DAY HEADER ─── */
   .day-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 14px 18px;
+    gap: 10px;
+    padding: 13px 14px;
     cursor: pointer;
     user-select: none;
-    position: relative;
   }
 
-  .day-header:hover { background: rgba(44,26,14,0.04); }
+  .day-header:hover { background: rgba(255,255,255,0.02); }
 
+  /* Number badge */
   .day-num {
     font-family: 'Secular One', sans-serif;
-    font-size: 1.4rem;
-    color: var(--red-accent);
-    min-width: 36px;
+    font-size: 1.1rem;
+    color: var(--gold);
+    background: rgba(240,192,64,0.1);
+    border: 1px solid rgba(240,192,64,0.25);
+    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
+    text-shadow: 0 0 8px rgba(240,192,64,0.4);
   }
 
-  .day-title {
+  /* Title block */
+  .day-info {
     flex: 1;
+    min-width: 0;
   }
 
-  .day-title .day-label {
-    font-size: 1.05rem;
-    color: var(--ink);
+  .day-label {
+    font-size: 0.95rem;
     font-weight: 500;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
   }
 
-  .day-title .day-masechtos {
-    font-size: 0.78rem;
-    color: var(--ink-faint);
+  .day-masechtos-preview {
+    font-size: 0.75rem;
+    color: var(--text-faint);
     margin-top: 2px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 320px;
   }
 
-  .day-progress-inline {
+  .bookmark-badge {
+    font-size: 0.68rem;
+    background: rgba(240,192,64,0.15);
+    color: var(--gold);
+    border: 1px solid rgba(240,192,64,0.3);
+    border-radius: 100px;
+    padding: 1px 7px;
+    white-space: nowrap;
+  }
+
+  /* Progress inline */
+  .day-progress {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
     flex-shrink: 0;
   }
 
-  .day-pct-text {
+  .day-pct {
     font-family: 'Secular One', sans-serif;
-    font-size: 0.95rem;
-    color: var(--ink-light);
-    min-width: 38px;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    min-width: 34px;
     text-align: center;
   }
 
   .day-bar-wrap {
-    width: 80px;
-    height: 8px;
-    background: rgba(44,26,14,0.15);
+    width: 64px;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
     border-radius: 100px;
     overflow: hidden;
-    border: 1px solid rgba(196,164,90,0.4);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
   }
 
   .day-bar-fill {
     height: 100%;
     border-radius: 100px;
-    background: linear-gradient(90deg, var(--green-done), #4a8a2a);
+    background: linear-gradient(90deg, var(--green-dark), var(--green));
     transition: width 0.4s ease;
   }
 
-  .day-check-all {
+  /* Checkbox day */
+  .day-cb {
     appearance: none;
-    width: 22px;
-    height: 22px;
-    border: 2px solid var(--border);
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-glow);
     border-radius: 5px;
-    background: white;
+    background: transparent;
     cursor: pointer;
     flex-shrink: 0;
     position: relative;
     transition: all 0.2s;
   }
 
-  .day-check-all:checked {
-    background: var(--green-done);
-    border-color: var(--green-done);
-  }
-
-  .day-check-all:checked::after {
+  .day-cb:checked { background: var(--green-dark); border-color: var(--green); }
+  .day-cb:checked::after {
     content: '✓';
-    position: absolute;
-    top: 50%; left: 50%;
+    position: absolute; top: 50%; left: 50%;
     transform: translate(-50%,-50%);
-    color: white;
-    font-size: 13px;
-    font-weight: bold;
+    color: white; font-size: 12px; font-weight: bold;
   }
 
-  .day-check-all:indeterminate {
-    background: var(--parchment-dark);
-    border-color: var(--gold);
-  }
-
-  .day-check-all:indeterminate::after {
+  .day-cb:indeterminate { background: rgba(240,192,64,0.12); border-color: var(--gold-dim); }
+  .day-cb:indeterminate::after {
     content: '—';
-    position: absolute;
-    top: 50%; left: 50%;
+    position: absolute; top: 50%; left: 50%;
     transform: translate(-50%,-50%);
-    color: var(--gold);
-    font-size: 12px;
-    font-weight: bold;
+    color: var(--gold-dim); font-size: 11px; font-weight: bold;
   }
 
-  .bookmark-btn {
+  /* Bookmark button */
+  .bk-btn {
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 1.2rem;
-    padding: 2px 4px;
-    opacity: 0.4;
-    transition: opacity 0.2s, transform 0.2s;
+    font-size: 1rem;
+    padding: 3px;
+    opacity: 0.3;
+    transition: opacity 0.2s, transform 0.15s;
     flex-shrink: 0;
+    line-height: 1;
   }
+  .bk-btn:hover, .bk-btn.active { opacity: 1; }
+  .bk-btn.active { transform: scale(1.2); filter: drop-shadow(0 0 4px var(--gold)); }
 
-  .bookmark-btn:hover, .bookmark-btn.active { opacity: 1; }
-  .bookmark-btn.active { transform: scale(1.15); }
-
+  /* Chevron */
   .chevron {
-    font-size: 0.8rem;
-    color: var(--ink-faint);
-    transition: transform 0.25s;
+    color: var(--text-faint);
+    font-size: 0.7rem;
+    transition: transform 0.22s;
     flex-shrink: 0;
+    line-height: 1;
   }
-
   .day-card.open .chevron { transform: rotate(180deg); }
 
-  /* DAY BODY */
+  /* ─── DAY BODY ─── */
   .day-body {
     display: none;
-    padding: 0 18px 16px;
-    border-top: 1px solid rgba(196,164,90,0.35);
+    padding: 4px 14px 16px;
+    border-top: 1px solid var(--border);
   }
-
   .day-card.open .day-body { display: block; }
 
-  /* MASEHET */
-  .masehet-block {
-    margin-top: 12px;
-  }
+  /* ─── MASEHET ─── */
+  .masehet-block { margin-top: 14px; }
 
   .masehet-header {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     margin-bottom: 8px;
   }
 
-  .masehet-check {
+  .mas-cb {
     appearance: none;
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--border);
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border-glow);
     border-radius: 50%;
-    background: white;
+    background: transparent;
     cursor: pointer;
     flex-shrink: 0;
     position: relative;
     transition: all 0.2s;
   }
 
-  .masehet-check:checked {
-    background: var(--green-done);
-    border-color: var(--green-done);
-  }
-
-  .masehet-check:checked::after {
+  .mas-cb:checked { background: var(--green-dark); border-color: var(--green); }
+  .mas-cb:checked::after {
     content: '✓';
-    position: absolute;
-    top: 50%; left: 50%;
+    position: absolute; top: 50%; left: 50%;
     transform: translate(-50%,-50%);
-    color: white;
-    font-size: 12px;
+    color: white; font-size: 11px;
   }
 
-  .masehet-check:indeterminate {
-    background: var(--parchment-darker);
-    border-color: var(--gold);
-  }
+  .mas-cb:indeterminate { background: rgba(74,144,217,0.15); border-color: var(--accent); }
 
-  .masehet-name {
-    font-size: 1.05rem;
+  .mas-name {
+    font-size: 1rem;
     font-weight: 700;
-    color: var(--ink);
+    color: var(--star);
     flex: 1;
   }
 
-  .masehet-progress-text {
-    font-size: 0.8rem;
-    color: var(--ink-faint);
+  .mas-count {
+    font-size: 0.75rem;
+    color: var(--text-faint);
     flex-shrink: 0;
   }
 
-  .masehet-bar-wrap {
-    flex-shrink: 0;
-    width: 60px;
-    height: 6px;
-    background: rgba(44,26,14,0.15);
+  .mas-bar-wrap {
+    width: 50px;
+    height: 5px;
+    background: rgba(255,255,255,0.06);
     border-radius: 100px;
     overflow: hidden;
+    flex-shrink: 0;
   }
 
-  .masehet-bar-fill {
+  .mas-bar-fill {
     height: 100%;
     border-radius: 100px;
-    background: linear-gradient(90deg, var(--green-done), #4a8a2a);
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
     transition: width 0.3s ease;
   }
 
-  /* CHAPTERS */
+  /* ─── CHAPTERS ─── */
   .chapters-grid {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    margin-right: 28px;
+    padding-right: 26px;
   }
 
-  .chapter-item {
+  .ch-item {
     display: flex;
     align-items: center;
     gap: 5px;
-    background: rgba(255,255,255,0.55);
-    border: 1px solid rgba(196,164,90,0.4);
-    border-radius: 6px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 7px;
     padding: 5px 10px;
     cursor: pointer;
     transition: all 0.15s;
-    min-width: 70px;
+    min-width: 68px;
   }
 
-  .chapter-item:hover { background: rgba(255,255,255,0.85); border-color: var(--gold); }
-
-  .chapter-item.done {
-    background: rgba(45,90,27,0.12);
-    border-color: rgba(45,90,27,0.4);
+  .ch-item:hover {
+    background: rgba(74,144,217,0.1);
+    border-color: var(--accent);
   }
 
-  .chapter-item.done .ch-label { color: var(--green-done); text-decoration: line-through; }
-  .chapter-item.done .ch-check { background: var(--green-done); border-color: var(--green-done); }
-  .chapter-item.done .ch-check::after { content: '✓'; }
+  .ch-item.done {
+    background: rgba(46,204,113,0.08);
+    border-color: rgba(46,204,113,0.3);
+  }
 
-  .ch-check {
-    width: 16px;
-    height: 16px;
-    border: 1.5px solid var(--border);
+  .ch-item.done .ch-box { background: var(--green-dark); border-color: var(--green); }
+  .ch-item.done .ch-box::after { content: '✓'; color: white; font-size: 10px; }
+  .ch-item.done .ch-lbl { color: var(--green); text-decoration: line-through; text-decoration-color: rgba(46,204,113,0.4); }
+
+  .ch-box {
+    width: 15px;
+    height: 15px;
+    border: 1.5px solid var(--border-glow);
     border-radius: 3px;
-    background: white;
+    background: transparent;
     flex-shrink: 0;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 11px;
-    color: white;
     transition: all 0.15s;
   }
 
-  .ch-label {
-    font-size: 0.85rem;
-    color: var(--ink-light);
+  .ch-lbl {
+    font-size: 0.82rem;
+    color: var(--text-dim);
     white-space: nowrap;
   }
 
-  /* BOOKMARK INDICATOR */
-  .bookmark-badge {
-    background: var(--red-accent);
-    color: var(--parchment);
-    font-size: 0.7rem;
-    padding: 2px 8px;
-    border-radius: 100px;
-    font-family: 'Secular One', sans-serif;
-    letter-spacing: 0.03em;
-  }
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-deep); }
+  ::-webkit-scrollbar-thumb { background: var(--border-glow); border-radius: 3px; }
 
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-track { background: rgba(44,26,14,0.2); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-
-  /* RESPONSIVE */
-  @media (max-width: 500px) {
-    body { padding: 10px; }
-    .day-title .day-masechtos { max-width: 160px; }
-    .day-bar-wrap { width: 50px; }
-    .global-progress { flex-direction: column; gap: 10px; }
-    .progress-bar-wrap { min-width: 100%; }
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 480px) {
+    .day-bar-wrap { width: 44px; }
+    .day-masechtos-preview { max-width: 140px; }
+    .btn { font-size: 0.8rem; padding: 7px 12px; }
   }
 </style>
 </head>
@@ -501,16 +539,20 @@
 <div class="page-wrapper">
 
   <header class="site-header">
+    <span class="header-moon">🌙</span>
     <h1>לימוד משנה יומי</h1>
     <p class="subtitle">מעקב אישי · סדר הש״ס</p>
+    <div class="header-divider">✦ ✦ ✦</div>
   </header>
 
-  <div class="global-progress">
-    <span class="label">התקדמות כללית</span>
-    <div class="progress-bar-wrap">
-      <div class="progress-bar-fill" id="globalBarFill" style="width:0%"></div>
+  <div class="global-card">
+    <div class="global-top">
+      <span class="global-label">✨ התקדמות כללית</span>
+      <span class="global-pct" id="globalPct">0%</span>
     </div>
-    <span class="progress-pct" id="globalPct">0%</span>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="globalBar" style="width:0%"></div>
+    </div>
     <div class="global-stats" id="globalStats">0 פרקים מתוך 0</div>
   </div>
 
@@ -522,393 +564,217 @@
   </div>
 
   <div class="days-container" id="daysContainer"></div>
-
 </div>
 
 <script>
 const DAYS_DATA = [
-  { day: 1, masechtos: [
-    { name: "ברכות", chapters: [1,2,3,4,5,6,7,8,9] },
-    { name: "פאה", chapters: [1,2,3,4,5,6,7,8] },
-    { name: "דמאי", chapters: [1] }
-  ]},
-  { day: 2, masechtos: [
-    { name: "דמאי", chapters: [2,3,4,5,6,7] },
-    { name: "כלאים", chapters: [1,2,3,4,5,6,7,8,9] },
-    { name: "שביעית", chapters: [1,2,3] }
-  ]},
-  { day: 3, masechtos: [
-    { name: "שביעית", chapters: [4,5,6,7,8,9,10] },
-    { name: "תרומות", chapters: [1,2,3,4,5,6,7,8,9,10,11] }
-  ]},
-  { day: 4, masechtos: [
-    { name: "מעשרות", chapters: [1,2,3,4,5] },
-    { name: "מעשר שני", chapters: [1,2,3,4,5] },
-    { name: "חלה", chapters: [1,2,3,4] },
-    { name: "ערלה", chapters: [1,2,3] },
-    { name: "ביכורים", chapters: [1] }
-  ]},
-  { day: 5, masechtos: [
-    { name: "ביכורים", chapters: [2,3,4] },
-    { name: "שבת", chapters: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16] }
-  ]},
-  { day: 6, masechtos: [
-    { name: "שבת", chapters: [17,18,19,20,21,22,23,24] },
-    { name: "עירובין", chapters: [1,2,3,4,5,6,7,8,9,10] }
-  ]},
-  { day: 7, masechtos: [
-    { name: "פסחים", chapters: [1,2,3,4,5,6,7,8,9,10] },
-    { name: "שקלים", chapters: [1,2,3,4,5,6,7,8] }
-  ]},
-  { day: 8, masechtos: [
-    { name: "יומא", chapters: [1,2,3,4,5,6,7,8] },
-    { name: "סוכה", chapters: [1,2,3,4,5] },
-    { name: "ביצה", chapters: [1,2,3,4,5] }
-  ]},
-  { day: 9, masechtos: [
-    { name: "ראש השנה", chapters: [1,2,3,4] },
-    { name: "תענית", chapters: [1,2,3,4] },
-    { name: "מגילה", chapters: [1,2,3,4] },
-    { name: "מועד קטן", chapters: [1,2,3] },
-    { name: "חגיגה", chapters: [1,2,3] }
-  ]},
-  { day: 10, masechtos: [
-    { name: "יבמות", chapters: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16] },
-    { name: "כתובות", chapters: [1,2] }
-  ]},
-  { day: 11, masechtos: [
-    { name: "כתובות", chapters: [3,4,5,6,7,8,9,10,11,12,13] },
-    { name: "נדרים", chapters: [1,2,3,4,5,6,7] }
-  ]},
-  { day: 12, masechtos: [
-    { name: "נדרים", chapters: [8,9,10,11] },
-    { name: "נזיר", chapters: [1,2,3,4,5,6,7,8,9] },
-    { name: "סוטה", chapters: [1,2,3,4,5] }
-  ]},
-  { day: 13, masechtos: [
-    { name: "סוטה", chapters: [6,7,8,9] },
-    { name: "גיטין", chapters: [1,2,3,4,5,6,7,8,9] },
-    { name: "קידושין", chapters: [1,2,3,4] },
-    { name: "בבא קמא", chapters: [1] }
-  ]},
-  { day: 14, masechtos: [
-    { name: "בבא קמא", chapters: [2,3,4,5,6,7,8,9,10] },
-    { name: "בבא מציעא", chapters: [1,2,3,4,5,6,7,8,9] }
-  ]},
-  { day: 15, masechtos: [
-    { name: "בבא מציעא", chapters: [10] },
-    { name: "בבא בתרא", chapters: [1,2,3,4,5,6,7,8,9,10] },
-    { name: "סנהדרין", chapters: [1,2,3,4,5,6,7] }
-  ]},
-  { day: 16, masechtos: [
-    { name: "סנהדרין", chapters: [8,9,10,11] },
-    { name: "מכות", chapters: [1,2,3] },
-    { name: "שבועות", chapters: [1,2,3,4,5,6,7,8] },
-    { name: "עדויות", chapters: [1,2,3] }
-  ]},
-  { day: 17, masechtos: [
-    { name: "עדויות", chapters: [4,5,6,7,8] },
-    { name: "עבודה זרה", chapters: [1,2,3,4,5] },
-    { name: "אבות", chapters: [1,2,3,4,5,6] },
-    { name: "הוריות", chapters: [1,2,3] }
-  ]},
-  { day: 18, masechtos: [
-    { name: "זבחים", chapters: [1,2,3,4,5,6,7,8,9,10,11,12,13,14] },
-    { name: "מנחות", chapters: [1,2,3,4] }
-  ]},
-  { day: 19, masechtos: [
-    { name: "מנחות", chapters: [5,6,7,8,9,10,11,12,13] },
-    { name: "חולין", chapters: [1,2,3,4,5,6,7,8,9] }
-  ]},
-  { day: 20, masechtos: [
-    { name: "חולין", chapters: [10,11,12] },
-    { name: "בכורות", chapters: [1,2,3,4,5,6,7,8,9] },
-    { name: "ערכין", chapters: [1,2,3,4,5,6] }
-  ]},
-  { day: 21, masechtos: [
-    { name: "ערכין", chapters: [7,8,9] },
-    { name: "תמורה", chapters: [1,2,3,4,5,6,7] },
-    { name: "כריתות", chapters: [1,2,3,4,5,6] },
-    { name: "מעילה", chapters: [1,2] }
-  ]},
-  { day: 22, masechtos: [
-    { name: "מעילה", chapters: [3,4,5,6] },
-    { name: "תמיד", chapters: [1,2,3,4,5,6,7] },
-    { name: "מידות", chapters: [1,2,3,4,5] },
-    { name: "קינים", chapters: [1,2] }
-  ]},
-  { day: 23, masechtos: [
-    { name: "קינים", chapters: [3] },
-    { name: "כלים", chapters: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17] }
-  ]},
-  { day: 24, masechtos: [
-    { name: "כלים", chapters: [18,19,20,21,22,23,24,25,26,27,28,29,30] },
-    { name: "אהלות", chapters: [1,2,3,4,5] }
-  ]},
-  { day: 25, masechtos: [
-    { name: "אהלות", chapters: [6,7,8,9,10,11,12,13,14,15,16,17,18] },
-    { name: "נגעים", chapters: [1,2,3,4,5] }
-  ]},
-  { day: 26, masechtos: [
-    { name: "נגעים", chapters: [6,7,8,9,10,11,12,13,14] },
-    { name: "פרה", chapters: [1,2,3,4,5,6,7,8,9] }
-  ]},
-  { day: 27, masechtos: [
-    { name: "פרה", chapters: [10,11,12] },
-    { name: "טהרות", chapters: [1,2,3,4,5,6,7,8,9,10] },
-    { name: "מקואות", chapters: [1,2,3,4,5] }
-  ]},
-  { day: 28, masechtos: [
-    { name: "מקואות", chapters: [6,7,8,9,10] },
-    { name: "נדה", chapters: [1,2,3,4,5,6,7,8,9,10] },
-    { name: "מכשירין", chapters: [1,2,3] }
-  ]},
-  { day: 29, masechtos: [
-    { name: "מכשירין", chapters: [4,5,6] },
-    { name: "זבים", chapters: [1,2,3,4,5] },
-    { name: "טבול יום", chapters: [1,2,3,4] },
-    { name: "ידים", chapters: [1,2,3,4] },
-    { name: "עוקצין", chapters: [1,2,3] }
-  ]}
+  { day:1, masechtos:[{name:"ברכות",chapters:[1,2,3,4,5,6,7,8,9]},{name:"פאה",chapters:[1,2,3,4,5,6,7,8]},{name:"דמאי",chapters:[1]}]},
+  { day:2, masechtos:[{name:"דמאי",chapters:[2,3,4,5,6,7]},{name:"כלאים",chapters:[1,2,3,4,5,6,7,8,9]},{name:"שביעית",chapters:[1,2,3]}]},
+  { day:3, masechtos:[{name:"שביעית",chapters:[4,5,6,7,8,9,10]},{name:"תרומות",chapters:[1,2,3,4,5,6,7,8,9,10,11]}]},
+  { day:4, masechtos:[{name:"מעשרות",chapters:[1,2,3,4,5]},{name:"מעשר שני",chapters:[1,2,3,4,5]},{name:"חלה",chapters:[1,2,3,4]},{name:"ערלה",chapters:[1,2,3]},{name:"ביכורים",chapters:[1]}]},
+  { day:5, masechtos:[{name:"ביכורים",chapters:[2,3,4]},{name:"שבת",chapters:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]}]},
+  { day:6, masechtos:[{name:"שבת",chapters:[17,18,19,20,21,22,23,24]},{name:"עירובין",chapters:[1,2,3,4,5,6,7,8,9,10]}]},
+  { day:7, masechtos:[{name:"פסחים",chapters:[1,2,3,4,5,6,7,8,9,10]},{name:"שקלים",chapters:[1,2,3,4,5,6,7,8]}]},
+  { day:8, masechtos:[{name:"יומא",chapters:[1,2,3,4,5,6,7,8]},{name:"סוכה",chapters:[1,2,3,4,5]},{name:"ביצה",chapters:[1,2,3,4,5]}]},
+  { day:9, masechtos:[{name:"ראש השנה",chapters:[1,2,3,4]},{name:"תענית",chapters:[1,2,3,4]},{name:"מגילה",chapters:[1,2,3,4]},{name:"מועד קטן",chapters:[1,2,3]},{name:"חגיגה",chapters:[1,2,3]}]},
+  { day:10, masechtos:[{name:"יבמות",chapters:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]},{name:"כתובות",chapters:[1,2]}]},
+  { day:11, masechtos:[{name:"כתובות",chapters:[3,4,5,6,7,8,9,10,11,12,13]},{name:"נדרים",chapters:[1,2,3,4,5,6,7]}]},
+  { day:12, masechtos:[{name:"נדרים",chapters:[8,9,10,11]},{name:"נזיר",chapters:[1,2,3,4,5,6,7,8,9]},{name:"סוטה",chapters:[1,2,3,4,5]}]},
+  { day:13, masechtos:[{name:"סוטה",chapters:[6,7,8,9]},{name:"גיטין",chapters:[1,2,3,4,5,6,7,8,9]},{name:"קידושין",chapters:[1,2,3,4]},{name:"בבא קמא",chapters:[1]}]},
+  { day:14, masechtos:[{name:"בבא קמא",chapters:[2,3,4,5,6,7,8,9,10]},{name:"בבא מציעא",chapters:[1,2,3,4,5,6,7,8,9]}]},
+  { day:15, masechtos:[{name:"בבא מציעא",chapters:[10]},{name:"בבא בתרא",chapters:[1,2,3,4,5,6,7,8,9,10]},{name:"סנהדרין",chapters:[1,2,3,4,5,6,7]}]},
+  { day:16, masechtos:[{name:"סנהדרין",chapters:[8,9,10,11]},{name:"מכות",chapters:[1,2,3]},{name:"שבועות",chapters:[1,2,3,4,5,6,7,8]},{name:"עדויות",chapters:[1,2,3]}]},
+  { day:17, masechtos:[{name:"עדויות",chapters:[4,5,6,7,8]},{name:"עבודה זרה",chapters:[1,2,3,4,5]},{name:"אבות",chapters:[1,2,3,4,5,6]},{name:"הוריות",chapters:[1,2,3]}]},
+  { day:18, masechtos:[{name:"זבחים",chapters:[1,2,3,4,5,6,7,8,9,10,11,12,13,14]},{name:"מנחות",chapters:[1,2,3,4]}]},
+  { day:19, masechtos:[{name:"מנחות",chapters:[5,6,7,8,9,10,11,12,13]},{name:"חולין",chapters:[1,2,3,4,5,6,7,8,9]}]},
+  { day:20, masechtos:[{name:"חולין",chapters:[10,11,12]},{name:"בכורות",chapters:[1,2,3,4,5,6,7,8,9]},{name:"ערכין",chapters:[1,2,3,4,5,6]}]},
+  { day:21, masechtos:[{name:"ערכין",chapters:[7,8,9]},{name:"תמורה",chapters:[1,2,3,4,5,6,7]},{name:"כריתות",chapters:[1,2,3,4,5,6]},{name:"מעילה",chapters:[1,2]}]},
+  { day:22, masechtos:[{name:"מעילה",chapters:[3,4,5,6]},{name:"תמיד",chapters:[1,2,3,4,5,6,7]},{name:"מידות",chapters:[1,2,3,4,5]},{name:"קינים",chapters:[1,2]}]},
+  { day:23, masechtos:[{name:"קינים",chapters:[3]},{name:"כלים",chapters:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]}]},
+  { day:24, masechtos:[{name:"כלים",chapters:[18,19,20,21,22,23,24,25,26,27,28,29,30]},{name:"אהלות",chapters:[1,2,3,4,5]}]},
+  { day:25, masechtos:[{name:"אהלות",chapters:[6,7,8,9,10,11,12,13,14,15,16,17,18]},{name:"נגעים",chapters:[1,2,3,4,5]}]},
+  { day:26, masechtos:[{name:"נגעים",chapters:[6,7,8,9,10,11,12,13,14]},{name:"פרה",chapters:[1,2,3,4,5,6,7,8,9]}]},
+  { day:27, masechtos:[{name:"פרה",chapters:[10,11,12]},{name:"טהרות",chapters:[1,2,3,4,5,6,7,8,9,10]},{name:"מקואות",chapters:[1,2,3,4,5]}]},
+  { day:28, masechtos:[{name:"מקואות",chapters:[6,7,8,9,10]},{name:"נדה",chapters:[1,2,3,4,5,6,7,8,9,10]},{name:"מכשירין",chapters:[1,2,3]}]},
+  { day:29, masechtos:[{name:"מכשירין",chapters:[4,5,6]},{name:"זבים",chapters:[1,2,3,4,5]},{name:"טבול יום",chapters:[1,2,3,4]},{name:"ידים",chapters:[1,2,3,4]},{name:"עוקצין",chapters:[1,2,3]}]}
 ];
 
-// Build a flat key: "day-masehet-chapter"
-// State: { checked: Set of keys, bookmark: dayIndex|null, openDays: Set }
 let state = { checked: new Set(), bookmark: null, openDays: new Set() };
 
 function saveState() {
-  localStorage.setItem('mishna_checked', JSON.stringify([...state.checked]));
-  localStorage.setItem('mishna_bookmark', state.bookmark !== null ? String(state.bookmark) : '');
-  localStorage.setItem('mishna_open', JSON.stringify([...state.openDays]));
+  localStorage.setItem('mishna2_checked', JSON.stringify([...state.checked]));
+  localStorage.setItem('mishna2_bk', state.bookmark !== null ? String(state.bookmark) : '');
+  localStorage.setItem('mishna2_open', JSON.stringify([...state.openDays]));
 }
 
 function loadState() {
   try {
-    const c = localStorage.getItem('mishna_checked');
+    const c = localStorage.getItem('mishna2_checked');
     if (c) state.checked = new Set(JSON.parse(c));
-    const b = localStorage.getItem('mishna_bookmark');
+    const b = localStorage.getItem('mishna2_bk');
     state.bookmark = (b !== null && b !== '') ? parseInt(b) : null;
-    const o = localStorage.getItem('mishna_open');
+    const o = localStorage.getItem('mishna2_open');
     if (o) state.openDays = new Set(JSON.parse(o));
   } catch(e) {}
 }
 
-function chapterKey(dayIdx, masName, ch) {
-  return `d${dayIdx}_m${masName}_c${ch}`;
+function key(di, mn, ch) { return `${di}|${mn}|${ch}`; }
+
+function dayProg(di) {
+  let total=0, done=0;
+  DAYS_DATA[di].masechtos.forEach(m => m.chapters.forEach(ch => { total++; if(state.checked.has(key(di,m.name,ch))) done++; }));
+  return {total,done};
 }
 
-function getDayProgress(dayIdx) {
-  const day = DAYS_DATA[dayIdx];
-  let total = 0, done = 0;
-  day.masechtos.forEach(m => {
-    m.chapters.forEach(ch => {
-      total++;
-      if (state.checked.has(chapterKey(dayIdx, m.name, ch))) done++;
-    });
-  });
-  return { total, done };
+function masProg(di, mn, chs) {
+  let done=0;
+  chs.forEach(ch => { if(state.checked.has(key(di,mn,ch))) done++; });
+  return {total:chs.length, done};
 }
 
-function getMasProgress(dayIdx, masName, chapters) {
-  let total = chapters.length, done = 0;
-  chapters.forEach(ch => {
-    if (state.checked.has(chapterKey(dayIdx, masName, ch))) done++;
-  });
-  return { total, done };
+function totalProg() {
+  let total=0, done=0;
+  DAYS_DATA.forEach((d,di) => d.masechtos.forEach(m => m.chapters.forEach(ch => { total++; if(state.checked.has(key(di,m.name,ch))) done++; })));
+  return {total,done};
 }
 
-function getTotalProgress() {
-  let total = 0, done = 0;
-  DAYS_DATA.forEach((d, di) => {
-    d.masechtos.forEach(m => {
-      m.chapters.forEach(ch => {
-        total++;
-        if (state.checked.has(chapterKey(di, m.name, ch))) done++;
-      });
-    });
-  });
-  return { total, done };
+function updateGlobal() {
+  const g = totalProg();
+  const pct = g.total ? Math.round(g.done/g.total*100) : 0;
+  document.getElementById('globalBar').style.width = pct+'%';
+  document.getElementById('globalPct').textContent = pct+'%';
+  document.getElementById('globalStats').textContent = `${g.done} פרקים מתוך ${g.total}`;
 }
 
 function render() {
   const container = document.getElementById('daysContainer');
   container.innerHTML = '';
-
-  DAYS_DATA.forEach((dayData, di) => {
-    const dp = getDayProgress(di);
-    const pct = dp.total ? Math.round(dp.done / dp.total * 100) : 0;
+  DAYS_DATA.forEach((d, di) => {
+    const dp = dayProg(di);
+    const pct = dp.total ? Math.round(dp.done/dp.total*100) : 0;
     const isOpen = state.openDays.has(di);
-    const isBookmarked = state.bookmark === di;
+    const isBk = state.bookmark === di;
     const isDone = dp.done === dp.total;
 
     const card = document.createElement('div');
-    card.className = 'day-card' + (isDone ? ' completed' : '') + (isBookmarked ? ' bookmarked' : '') + (isOpen ? ' open' : '');
-    card.id = `day-card-${di}`;
+    card.className = ['day-card', isDone?'completed':'', isBk?'bookmarked':'', isOpen?'open':''].filter(Boolean).join(' ');
+    card.id = `dc-${di}`;
 
-    // Masechtos summary
-    const masNames = dayData.masechtos.map(m => m.name).join(' · ');
+    const masPreview = d.masechtos.map(m=>m.name).join(' · ');
 
     card.innerHTML = `
-      <div class="day-header" onclick="toggleDay(${di}, event)">
-        <span class="day-num">${dayData.day}</span>
-        <div class="day-title">
-          <div class="day-label">יום ${dayData.day} ${isBookmarked ? '<span class="bookmark-badge">🔖 סימניה</span>' : ''}</div>
-          <div class="day-masechtos">${masNames}</div>
+      <div class="day-header" onclick="toggleDay(${di},event)">
+        <div class="day-num">${d.day}</div>
+        <div class="day-info">
+          <div class="day-label">
+            יום ${d.day}
+            ${isBk ? '<span class="bookmark-badge">🔖 סימניה</span>' : ''}
+          </div>
+          <div class="day-masechtos-preview">${masPreview}</div>
         </div>
-        <div class="day-progress-inline">
-          <span class="day-pct-text">${pct}%</span>
+        <div class="day-progress">
+          <span class="day-pct">${pct}%</span>
           <div class="day-bar-wrap"><div class="day-bar-fill" style="width:${pct}%"></div></div>
         </div>
-        <input type="checkbox" class="day-check-all" id="day-check-${di}"
-          onclick="toggleDay_stop(event)"
-          onchange="toggleDayAll(${di}, this.checked)"
-          ${dp.done === dp.total ? 'checked' : ''}>
-        <button class="bookmark-btn ${isBookmarked ? 'active' : ''}" title="סימניה"
-          onclick="toggleBookmark(${di}, event)">🔖</button>
+        <input type="checkbox" class="day-cb" id="dcb-${di}"
+          onclick="stopProp(event)"
+          onchange="toggleDayAll(${di},this.checked)"
+          ${dp.done===dp.total?'checked':''}>
+        <button class="bk-btn ${isBk?'active':''}" onclick="toggleBk(${di},event)" title="סימניה">🔖</button>
         <span class="chevron">▼</span>
       </div>
-      <div class="day-body" id="day-body-${di}">
-        ${renderMasechtos(di, dayData.masechtos)}
-      </div>
-    `;
+      <div class="day-body">
+        ${renderMas(di, d.masechtos)}
+      </div>`;
 
     container.appendChild(card);
 
-    // Set indeterminate state
-    const cb = card.querySelector(`#day-check-${di}`);
+    const cb = document.getElementById(`dcb-${di}`);
     if (dp.done > 0 && dp.done < dp.total) cb.indeterminate = true;
   });
 
   updateGlobal();
 }
 
-function renderMasechtos(di, masechtos) {
+function renderMas(di, masechtos) {
   return masechtos.map(m => {
-    const mp = getMasProgress(di, m.name, m.chapters);
-    const mpct = mp.total ? Math.round(mp.done / mp.total * 100) : 0;
-    const allDone = mp.done === mp.total;
-
-    const chaptersHtml = m.chapters.map(ch => {
-      const key = chapterKey(di, m.name, ch);
-      const done = state.checked.has(key);
-      return `
-        <div class="chapter-item ${done ? 'done' : ''}" onclick="toggleChapter('${key}', ${di})">
-          <div class="ch-check">${done ? '✓' : ''}</div>
-          <span class="ch-label">פרק ${ch}</span>
-        </div>`;
+    const mp = masProg(di, m.name, m.chapters);
+    const mpct = mp.total ? Math.round(mp.done/mp.total*100) : 0;
+    const chs = m.chapters.map(ch => {
+      const k = key(di,m.name,ch);
+      const done = state.checked.has(k);
+      return `<div class="ch-item ${done?'done':''}" onclick="toggleCh('${k}',${di})">
+        <div class="ch-box">${done?'✓':''}</div>
+        <span class="ch-lbl">פרק ${ch}</span>
+      </div>`;
     }).join('');
 
-    return `
-      <div class="masehet-block" id="mas-${di}-${m.name}">
-        <div class="masehet-header">
-          <input type="checkbox" class="masehet-check" id="mas-check-${di}-${m.name}"
-            ${allDone ? 'checked' : ''}
-            onchange="toggleMasAll(${di}, '${m.name}', ${JSON.stringify(m.chapters)}, this.checked)">
-          <span class="masehet-name">${m.name}</span>
-          <span class="masehet-progress-text">${mp.done}/${mp.total}</span>
-          <div class="masehet-bar-wrap"><div class="masehet-bar-fill" style="width:${mpct}%"></div></div>
-        </div>
-        <div class="chapters-grid">${chaptersHtml}</div>
-      </div>`;
+    return `<div class="masehet-block">
+      <div class="masehet-header">
+        <input type="checkbox" class="mas-cb" id="mcb-${di}-${m.name.replace(/\s/g,'_')}"
+          ${mp.done===mp.total?'checked':''}
+          onchange="toggleMasAll(${di},'${m.name}',${JSON.stringify(m.chapters)},this.checked)">
+        <span class="mas-name">${m.name}</span>
+        <span class="mas-count">${mp.done}/${mp.total}</span>
+        <div class="mas-bar-wrap"><div class="mas-bar-fill" style="width:${mpct}%"></div></div>
+      </div>
+      <div class="chapters-grid">${chs}</div>
+    </div>`;
   }).join('');
 }
 
-function updateGlobal() {
-  const g = getTotalProgress();
-  const pct = g.total ? Math.round(g.done / g.total * 100) : 0;
-  document.getElementById('globalBarFill').style.width = pct + '%';
-  document.getElementById('globalPct').textContent = pct + '%';
-  document.getElementById('globalStats').textContent = `${g.done} פרקים מתוך ${g.total}`;
-}
+function stopProp(e) { e.stopPropagation(); }
 
-function toggleChapter(key, di) {
-  if (state.checked.has(key)) {
-    state.checked.delete(key);
-  } else {
-    state.checked.add(key);
-  }
-  saveState();
-  render();
-  // Re-open the day
-  if (!state.openDays.has(di)) {
-    state.openDays.add(di);
-  }
-  render();
+function toggleCh(k, di) {
+  state.checked.has(k) ? state.checked.delete(k) : state.checked.add(k);
+  state.openDays.add(di);
+  saveState(); render();
 }
 
 function toggleDayAll(di, checked) {
-  const day = DAYS_DATA[di];
-  day.masechtos.forEach(m => {
-    m.chapters.forEach(ch => {
-      const key = chapterKey(di, m.name, ch);
-      if (checked) state.checked.add(key);
-      else state.checked.delete(key);
-    });
-  });
-  saveState();
-  render();
-  if (!state.openDays.has(di)) state.openDays.add(di);
-  render();
+  DAYS_DATA[di].masechtos.forEach(m => m.chapters.forEach(ch => {
+    checked ? state.checked.add(key(di,m.name,ch)) : state.checked.delete(key(di,m.name,ch));
+  }));
+  state.openDays.add(di);
+  saveState(); render();
 }
 
-function toggleMasAll(di, masName, chapters, checked) {
-  chapters.forEach(ch => {
-    const key = chapterKey(di, masName, ch);
-    if (checked) state.checked.add(key);
-    else state.checked.delete(key);
-  });
-  saveState();
-  if (!state.openDays.has(di)) state.openDays.add(di);
-  render();
+function toggleMasAll(di, mn, chs, checked) {
+  chs.forEach(ch => { checked ? state.checked.add(key(di,mn,ch)) : state.checked.delete(key(di,mn,ch)); });
+  state.openDays.add(di);
+  saveState(); render();
 }
 
 function toggleDay(di, e) {
-  if (e && (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON')) return;
-  if (state.openDays.has(di)) state.openDays.delete(di);
-  else state.openDays.add(di);
-  saveState();
-  render();
+  if (e && (e.target.tagName==='INPUT'||e.target.tagName==='BUTTON')) return;
+  state.openDays.has(di) ? state.openDays.delete(di) : state.openDays.add(di);
+  saveState(); render();
 }
 
-function toggleDay_stop(e) { e.stopPropagation(); }
-
-function toggleBookmark(di, e) {
+function toggleBk(di, e) {
   e.stopPropagation();
-  state.bookmark = (state.bookmark === di) ? null : di;
-  saveState();
-  render();
+  state.bookmark = (state.bookmark===di) ? null : di;
+  saveState(); render();
 }
 
 function scrollToBookmark() {
-  if (state.bookmark === null) { alert('אין סימניה מוגדרת'); return; }
+  if (state.bookmark===null) { alert('אין סימניה מוגדרת'); return; }
   state.openDays.add(state.bookmark);
-  saveState();
-  render();
+  saveState(); render();
   setTimeout(() => {
-    const el = document.getElementById(`day-card-${state.bookmark}`);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 100);
+    const el = document.getElementById(`dc-${state.bookmark}`);
+    if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 80);
 }
 
-function expandAll() {
-  DAYS_DATA.forEach((_, i) => state.openDays.add(i));
-  saveState(); render();
-}
-
-function collapseAll() {
-  state.openDays.clear();
-  saveState(); render();
-}
-
-function resetAll() {
+function expandAll()  { DAYS_DATA.forEach((_,i)=>state.openDays.add(i)); saveState(); render(); }
+function collapseAll(){ state.openDays.clear(); saveState(); render(); }
+function resetAll()   {
   if (!confirm('למחוק את כל ההתקדמות?')) return;
-  state.checked.clear();
-  state.bookmark = null;
-  state.openDays.clear();
+  state.checked.clear(); state.bookmark=null; state.openDays.clear();
   saveState(); render();
 }
 
-// Init
 loadState();
 render();
 </script>
