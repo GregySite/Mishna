@@ -4,61 +4,67 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>לימוד משנה יומי</title>
-<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Secular+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Secular+One&family=Noto+Serif+Hebrew:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-deep:    #080f1e;
-    --bg-card:    #0d1a2f;
-    --bg-card2:   #112240;
-    --border:     #1e3a5f;
-    --border-glow:#2a5298;
-    --gold:       #f0c040;
-    --gold-dim:   #a07c20;
-    --star:       #e8d68a;
-    --text:       #d8e8ff;
-    --text-dim:   #7a9fc0;
-    --text-faint: #3a5878;
-    --green:      #2ecc71;
-    --green-dark: #1a7a44;
-    --red:        #e74c6e;
-    --accent:     #4a90d9;
-    --accent2:    #7b5ea7;
+    --bg:         #f7f3ee;
+    --bg2:        #efe9e0;
+    --card:       #ffffff;
+    --card-hover: #fdfaf6;
+    --border:     #e0d5c5;
+    --border-acc: #c8a96e;
+    --gold:       #b5832a;
+    --gold-light: #d4a84b;
+    --gold-pale:  #f5ecd8;
+    --ink:        #1a1208;
+    --ink-mid:    #4a3c28;
+    --ink-dim:    #9a8a72;
+    --ink-faint:  #c8bca8;
+    --green:      #2d7a4f;
+    --green-bg:   #eaf5ee;
+    --green-brd:  #a8d8bc;
+    --red:        #b03030;
+    --red-bg:     #fdf0f0;
+    --accent:     #3a6ea8;
+    --accent-bg:  #eef3fa;
+    --shadow-sm:  0 1px 4px rgba(90,65,30,0.08);
+    --shadow-md:  0 3px 12px rgba(90,65,30,0.12);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: 'Frank Ruhl Libre', serif;
-    background-color: var(--bg-deep);
+    font-family: 'Noto Serif Hebrew', 'Frank Ruhl Libre', serif;
+    background-color: var(--bg);
     background-image:
-      radial-gradient(ellipse at 50% 0%, rgba(42,82,152,0.35) 0%, transparent 65%),
-      radial-gradient(ellipse at 20% 80%, rgba(123,94,167,0.2) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 40%, rgba(74,144,217,0.15) 0%, transparent 45%);
+      radial-gradient(ellipse at 50% 0%, rgba(181,131,42,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 90% 100%, rgba(58,110,168,0.06) 0%, transparent 50%);
     min-height: 100vh;
     padding: 20px 16px 40px;
     position: relative;
     overflow-x: hidden;
   }
 
+  /* Subtle stars — visible but light against cream */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
     background-image:
-      radial-gradient(1px 1px at 10% 15%, rgba(232,214,138,0.9) 0%, transparent 100%),
-      radial-gradient(1px 1px at 25% 8%,  rgba(232,214,138,0.7) 0%, transparent 100%),
-      radial-gradient(1.5px 1.5px at 40% 22%, rgba(232,214,138,0.8) 0%, transparent 100%),
-      radial-gradient(1px 1px at 55% 5%,  rgba(232,214,138,0.6) 0%, transparent 100%),
-      radial-gradient(1px 1px at 70% 18%, rgba(232,214,138,0.9) 0%, transparent 100%),
-      radial-gradient(1.5px 1.5px at 82% 10%, rgba(232,214,138,0.7) 0%, transparent 100%),
-      radial-gradient(1px 1px at 92% 25%, rgba(232,214,138,0.8) 0%, transparent 100%),
-      radial-gradient(1px 1px at 5%  40%, rgba(232,214,138,0.5) 0%, transparent 100%),
-      radial-gradient(1px 1px at 15% 55%, rgba(232,214,138,0.6) 0%, transparent 100%),
-      radial-gradient(1px 1px at 88% 50%, rgba(232,214,138,0.7) 0%, transparent 100%),
-      radial-gradient(1px 1px at 95% 70%, rgba(232,214,138,0.5) 0%, transparent 100%),
-      radial-gradient(1px 1px at 30% 75%, rgba(232,214,138,0.4) 0%, transparent 100%),
-      radial-gradient(1.5px 1.5px at 60% 85%, rgba(232,214,138,0.6) 0%, transparent 100%),
-      radial-gradient(1px 1px at 75% 92%, rgba(232,214,138,0.5) 0%, transparent 100%);
+      radial-gradient(1px 1px at 10% 12%, rgba(181,131,42,0.55) 0%, transparent 100%),
+      radial-gradient(1px 1px at 22% 6%,  rgba(181,131,42,0.4)  0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 38% 20%, rgba(181,131,42,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 53% 4%,  rgba(181,131,42,0.35) 0%, transparent 100%),
+      radial-gradient(1px 1px at 68% 16%, rgba(181,131,42,0.55) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 80% 9%, rgba(181,131,42,0.45) 0%, transparent 100%),
+      radial-gradient(1px 1px at 91% 23%, rgba(181,131,42,0.4)  0%, transparent 100%),
+      radial-gradient(1px 1px at 6%  38%, rgba(181,131,42,0.3)  0%, transparent 100%),
+      radial-gradient(1px 1px at 14% 52%, rgba(181,131,42,0.35) 0%, transparent 100%),
+      radial-gradient(1px 1px at 87% 48%, rgba(181,131,42,0.4)  0%, transparent 100%),
+      radial-gradient(1px 1px at 94% 68%, rgba(181,131,42,0.3)  0%, transparent 100%),
+      radial-gradient(1px 1px at 28% 73%, rgba(181,131,42,0.25) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 58% 83%, rgba(181,131,42,0.35) 0%, transparent 100%),
+      radial-gradient(1px 1px at 74% 90%, rgba(181,131,42,0.3)  0%, transparent 100%);
     pointer-events: none;
     z-index: 0;
   }
@@ -70,55 +76,82 @@
     z-index: 1;
   }
 
+  /* ── HEADER ── */
   .site-header {
     text-align: center;
-    padding: 28px 16px 20px;
+    padding: 32px 16px 24px;
   }
 
-  .header-moon {
-    font-size: 2.8rem;
+  /* Big decorative Hebrew letter ש as ornament */
+  .header-ornament {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 3.6rem;
+    font-weight: 900;
+    color: var(--gold-light);
+    opacity: 0.18;
     display: block;
-    margin-bottom: 6px;
-    filter: drop-shadow(0 0 12px rgba(240,192,64,0.7));
+    line-height: 1;
+    margin-bottom: -18px;
+    letter-spacing: 0;
+    user-select: none;
   }
 
   .site-header h1 {
     font-family: 'Secular One', sans-serif;
-    font-size: clamp(1.8rem, 5vw, 2.8rem);
-    color: var(--gold);
-    letter-spacing: 0.06em;
-    text-shadow: 0 0 24px rgba(240,192,64,0.5), 0 2px 4px rgba(0,0,0,0.8);
+    font-size: clamp(1.7rem, 5vw, 2.6rem);
+    color: var(--ink);
+    letter-spacing: 0.04em;
     margin-bottom: 6px;
+    position: relative;
   }
 
   .site-header .subtitle {
-    font-size: 0.95rem;
-    color: var(--text-dim);
-    letter-spacing: 0.08em;
+    font-size: 0.9rem;
+    color: var(--ink-dim);
+    letter-spacing: 0.1em;
   }
 
   .header-divider {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin: 16px 0;
-    color: var(--gold-dim);
-    font-size: 0.8rem;
+    gap: 10px;
+    margin: 18px 0 0;
+    color: var(--gold);
+    font-size: 0.75rem;
+    opacity: 0.6;
   }
   .header-divider::before, .header-divider::after {
     content: '';
     flex: 1;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    background: linear-gradient(90deg, transparent, var(--border-acc), transparent);
   }
 
+  /* ── GLOBAL CARD ── */
   .global-card {
-    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-card2) 100%);
-    border: 1px solid var(--border-glow);
+    background: var(--card);
+    border: 1px solid var(--border-acc);
     border-radius: 16px;
     padding: 18px 22px;
     margin-bottom: 16px;
-    box-shadow: 0 0 24px rgba(42,82,152,0.25), 0 4px 12px rgba(0,0,0,0.4);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* decorative corner aleph */
+  .global-card::before {
+    content: 'א';
+    position: absolute;
+    left: 12px; top: 4px;
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--gold-light);
+    opacity: 0.07;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
   }
 
   .global-top {
@@ -130,23 +163,23 @@
 
   .global-label {
     font-family: 'Secular One', sans-serif;
-    font-size: 1rem;
-    color: var(--gold);
+    font-size: 0.95rem;
+    color: var(--ink-mid);
     flex-shrink: 0;
   }
 
   .global-pct {
     font-family: 'Secular One', sans-serif;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     color: var(--green);
     margin-right: auto;
-    text-shadow: 0 0 10px rgba(46,204,113,0.4);
+    font-weight: 700;
   }
 
   .progress-bar-wrap {
     width: 100%;
-    height: 14px;
-    background: rgba(255,255,255,0.06);
+    height: 12px;
+    background: var(--bg2);
     border-radius: 100px;
     overflow: hidden;
     border: 1px solid var(--border);
@@ -155,27 +188,27 @@
   .progress-bar-fill {
     height: 100%;
     border-radius: 100px;
-    background: linear-gradient(90deg, var(--green-dark), var(--green));
+    background: linear-gradient(90deg, #1f6b3a, var(--green));
     transition: width 0.5s cubic-bezier(.4,0,.2,1);
-    box-shadow: 0 0 8px rgba(46,204,113,0.5);
     position: relative;
   }
 
   .progress-bar-fill::after {
     content: '';
     position: absolute;
-    top: 2px; left: 4px; right: 4px; height: 4px;
-    background: rgba(255,255,255,0.2);
+    top: 2px; left: 4px; right: 4px; height: 3px;
+    background: rgba(255,255,255,0.35);
     border-radius: 100px;
   }
 
   .global-stats {
     text-align: center;
-    font-size: 0.8rem;
-    color: var(--text-faint);
+    font-size: 0.78rem;
+    color: var(--ink-faint);
     margin-top: 8px;
   }
 
+  /* ── CONTROLS ── */
   .controls {
     display: flex;
     gap: 8px;
@@ -185,81 +218,85 @@
   }
 
   .btn {
-    font-family: 'Frank Ruhl Libre', serif;
-    font-size: 0.88rem;
+    font-family: 'Noto Serif Hebrew', serif;
+    font-size: 0.85rem;
     padding: 8px 16px;
     border-radius: 8px;
     cursor: pointer;
-    border: 1px solid var(--border-glow);
-    background: linear-gradient(135deg, var(--bg-card2) 0%, var(--bg-card) 100%);
-    color: var(--text);
-    transition: all 0.2s;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--ink-mid);
+    transition: all 0.18s;
+    box-shadow: var(--shadow-sm);
     white-space: nowrap;
   }
 
   .btn:hover {
-    border-color: var(--gold-dim);
+    border-color: var(--border-acc);
     color: var(--gold);
-    box-shadow: 0 0 12px rgba(240,192,64,0.15), 0 2px 8px rgba(0,0,0,0.4);
+    background: var(--gold-pale);
     transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
   }
 
-  .btn-danger { border-color: rgba(231,76,110,0.4); color: var(--red); }
-  .btn-danger:hover { border-color: var(--red); box-shadow: 0 0 12px rgba(231,76,110,0.2); }
+  .btn-danger { color: var(--red); border-color: rgba(176,48,48,0.25); }
+  .btn-danger:hover { background: var(--red-bg); border-color: var(--red); color: var(--red); }
 
-  .days-container { display: flex; flex-direction: column; gap: 10px; }
+  /* ── DAY CARDS ── */
+  .days-container { display: flex; flex-direction: column; gap: 8px; }
 
   .day-card {
-    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-card2) 100%);
+    background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.35);
+    box-shadow: var(--shadow-sm);
     transition: border-color 0.2s, box-shadow 0.2s;
   }
 
-  .day-card:hover { border-color: var(--border-glow); }
+  .day-card:hover { border-color: var(--border-acc); box-shadow: var(--shadow-md); }
 
   .day-card.completed {
-    border-color: var(--green-dark);
-    background: linear-gradient(135deg, #0a1f12 0%, #0d2b18 100%);
-    box-shadow: 0 0 16px rgba(46,204,113,0.12), 0 2px 10px rgba(0,0,0,0.35);
+    background: var(--green-bg);
+    border-color: var(--green-brd);
   }
 
   .day-card.bookmarked {
-    border-color: var(--gold-dim);
-    box-shadow: 0 0 20px rgba(240,192,64,0.2), 0 2px 10px rgba(0,0,0,0.35);
+    border-color: var(--gold-light);
+    box-shadow: 0 0 0 2px rgba(181,131,42,0.15), var(--shadow-md);
   }
 
-  /* CRITICAL FIX: strict flex row, no overflow */
+  /* ── DAY HEADER ── */
   .day-header {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 8px;
-    padding: 12px 14px;
+    padding: 11px 14px;
     cursor: pointer;
     user-select: none;
     width: 100%;
   }
 
-  .day-header:hover { background: rgba(255,255,255,0.02); }
+  .day-header:hover { background: rgba(181,131,42,0.03); }
 
   .day-num {
     font-family: 'Secular One', sans-serif;
-    font-size: 1rem;
-    color: var(--gold);
-    background: rgba(240,192,64,0.1);
-    border: 1px solid rgba(240,192,64,0.25);
+    font-size: 0.95rem;
+    color: var(--card);
+    background: var(--gold);
     border-radius: 8px;
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    text-shadow: 0 0 8px rgba(240,192,64,0.4);
+    font-weight: 700;
+  }
+
+  .day-card.completed .day-num {
+    background: var(--green);
   }
 
   .day-info {
@@ -269,9 +306,9 @@
   }
 
   .day-label {
-    font-size: 0.92rem;
-    font-weight: 500;
-    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink);
     display: flex;
     align-items: center;
     gap: 6px;
@@ -280,8 +317,8 @@
   }
 
   .day-masechtos-preview {
-    font-size: 0.73rem;
-    color: var(--text-faint);
+    font-size: 0.72rem;
+    color: var(--ink-faint);
     margin-top: 2px;
     white-space: nowrap;
     overflow: hidden;
@@ -289,19 +326,20 @@
   }
 
   .bookmark-badge {
-    font-size: 0.65rem;
-    background: rgba(240,192,64,0.15);
+    font-size: 0.62rem;
+    background: var(--gold-pale);
     color: var(--gold);
-    border: 1px solid rgba(240,192,64,0.3);
+    border: 1px solid rgba(181,131,42,0.35);
     border-radius: 100px;
     padding: 1px 7px;
     white-space: nowrap;
+    font-weight: 600;
   }
 
   .day-pct {
     font-family: 'Secular One', sans-serif;
-    font-size: 0.82rem;
-    color: var(--text-dim);
+    font-size: 0.8rem;
+    color: var(--ink-dim);
     flex-shrink: 0;
     min-width: 32px;
     text-align: center;
@@ -310,7 +348,7 @@
   .day-bar-wrap {
     width: 56px;
     height: 6px;
-    background: rgba(255,255,255,0.06);
+    background: var(--bg2);
     border-radius: 100px;
     overflow: hidden;
     border: 1px solid var(--border);
@@ -320,7 +358,7 @@
   .day-bar-fill {
     height: 100%;
     border-radius: 100px;
-    background: linear-gradient(90deg, var(--green-dark), var(--green));
+    background: linear-gradient(90deg, #1f6b3a, var(--green));
     transition: width 0.4s ease;
   }
 
@@ -330,16 +368,16 @@
     width: 20px;
     height: 20px;
     min-width: 20px;
-    border: 2px solid var(--border-glow);
+    border: 2px solid var(--border-acc);
     border-radius: 5px;
-    background: transparent;
+    background: white;
     cursor: pointer;
     flex-shrink: 0;
     position: relative;
     transition: all 0.2s;
   }
 
-  .day-cb:checked { background: var(--green-dark); border-color: var(--green); }
+  .day-cb:checked { background: var(--green); border-color: var(--green); }
   .day-cb:checked::after {
     content: '✓';
     position: absolute; top: 50%; left: 50%;
@@ -347,12 +385,12 @@
     color: white; font-size: 12px; font-weight: bold;
   }
 
-  .day-cb:indeterminate { background: rgba(240,192,64,0.12); border-color: var(--gold-dim); }
+  .day-cb:indeterminate { background: var(--gold-pale); border-color: var(--gold); }
   .day-cb:indeterminate::after {
     content: '—';
     position: absolute; top: 50%; left: 50%;
     transform: translate(-50%,-50%);
-    color: var(--gold-dim); font-size: 11px; font-weight: bold;
+    color: var(--gold); font-size: 11px; font-weight: bold;
   }
 
   .bk-btn {
@@ -361,7 +399,7 @@
     cursor: pointer;
     font-size: 0.95rem;
     padding: 2px;
-    opacity: 0.3;
+    opacity: 0.25;
     transition: opacity 0.2s, transform 0.15s;
     flex-shrink: 0;
     line-height: 1;
@@ -369,10 +407,10 @@
     align-items: center;
   }
   .bk-btn:hover, .bk-btn.active { opacity: 1; }
-  .bk-btn.active { transform: scale(1.2); filter: drop-shadow(0 0 4px var(--gold)); }
+  .bk-btn.active { transform: scale(1.2); }
 
   .chevron {
-    color: var(--text-faint);
+    color: var(--ink-faint);
     font-size: 0.65rem;
     transition: transform 0.22s;
     flex-shrink: 0;
@@ -382,6 +420,7 @@
   }
   .day-card.open .chevron { transform: rotate(180deg); }
 
+  /* ── DAY BODY ── */
   .day-body {
     display: none;
     padding: 4px 14px 16px;
@@ -389,6 +428,7 @@
   }
   .day-card.open .day-body { display: block; }
 
+  /* ── MASEHET ── */
   .masehet-block { margin-top: 14px; }
 
   .masehet-header {
@@ -404,16 +444,16 @@
     width: 18px;
     height: 18px;
     min-width: 18px;
-    border: 2px solid var(--border-glow);
+    border: 2px solid var(--border-acc);
     border-radius: 50%;
-    background: transparent;
+    background: white;
     cursor: pointer;
     flex-shrink: 0;
     position: relative;
     transition: all 0.2s;
   }
 
-  .mas-cb:checked { background: var(--green-dark); border-color: var(--green); }
+  .mas-cb:checked { background: var(--green); border-color: var(--green); }
   .mas-cb:checked::after {
     content: '✓';
     position: absolute; top: 50%; left: 50%;
@@ -421,37 +461,39 @@
     color: white; font-size: 11px;
   }
 
-  .mas-cb:indeterminate { background: rgba(74,144,217,0.15); border-color: var(--accent); }
+  .mas-cb:indeterminate { background: var(--accent-bg); border-color: var(--accent); }
 
   .mas-name {
     font-size: 1rem;
     font-weight: 700;
-    color: var(--star);
+    color: var(--ink);
     flex: 1;
   }
 
   .mas-count {
-    font-size: 0.75rem;
-    color: var(--text-faint);
+    font-size: 0.74rem;
+    color: var(--ink-faint);
     flex-shrink: 0;
   }
 
   .mas-bar-wrap {
     width: 50px;
     height: 5px;
-    background: rgba(255,255,255,0.06);
+    background: var(--bg2);
     border-radius: 100px;
     overflow: hidden;
     flex-shrink: 0;
+    border: 1px solid var(--border);
   }
 
   .mas-bar-fill {
     height: 100%;
     border-radius: 100px;
-    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    background: linear-gradient(90deg, var(--accent), #6aa3d4);
     transition: width 0.3s ease;
   }
 
+  /* ── CHAPTERS ── */
   .chapters-grid {
     display: flex;
     flex-wrap: wrap;
@@ -463,7 +505,7 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    background: rgba(255,255,255,0.04);
+    background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 7px;
     padding: 5px 10px;
@@ -472,24 +514,27 @@
     min-width: 68px;
   }
 
-  .ch-item:hover { background: rgba(74,144,217,0.1); border-color: var(--accent); }
-
-  .ch-item.done {
-    background: rgba(46,204,113,0.08);
-    border-color: rgba(46,204,113,0.3);
+  .ch-item:hover {
+    background: var(--accent-bg);
+    border-color: var(--accent);
   }
 
-  .ch-item.done .ch-box { background: var(--green-dark); border-color: var(--green); }
+  .ch-item.done {
+    background: var(--green-bg);
+    border-color: var(--green-brd);
+  }
+
+  .ch-item.done .ch-box { background: var(--green); border-color: var(--green); }
   .ch-item.done .ch-box::after { content: '✓'; color: white; font-size: 10px; }
-  .ch-item.done .ch-lbl { color: var(--green); text-decoration: line-through; text-decoration-color: rgba(46,204,113,0.4); }
+  .ch-item.done .ch-lbl { color: var(--green); text-decoration: line-through; text-decoration-color: rgba(45,122,79,0.35); }
 
   .ch-box {
     width: 15px;
     height: 15px;
     min-width: 15px;
-    border: 1.5px solid var(--border-glow);
+    border: 1.5px solid var(--border-acc);
     border-radius: 3px;
-    background: transparent;
+    background: white;
     flex-shrink: 0;
     position: relative;
     display: flex;
@@ -500,17 +545,32 @@
 
   .ch-lbl {
     font-size: 0.82rem;
-    color: var(--text-dim);
+    color: var(--ink-mid);
     white-space: nowrap;
   }
 
+  /* ── SCROLLBAR ── */
   ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg-deep); }
-  ::-webkit-scrollbar-thumb { background: var(--border-glow); border-radius: 3px; }
+  ::-webkit-scrollbar-track { background: var(--bg2); }
+  ::-webkit-scrollbar-thumb { background: var(--border-acc); border-radius: 3px; }
+
+  .header-date {
+    font-size: 0.88rem;
+    color: var(--ink-dim);
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .header-date-sep { color: var(--ink-faint); }
 
   @media (max-width: 480px) {
     .day-bar-wrap { width: 40px; }
     .btn { font-size: 0.78rem; padding: 7px 10px; }
+    .date-card { flex-direction: column; align-items: flex-start; }
   }
 </style>
 </head>
@@ -518,15 +578,20 @@
 <div class="page-wrapper">
 
   <header class="site-header">
-    <span class="header-moon">🌙</span>
+    <span class="header-ornament">מ</span>
     <h1>לימוד משנה יומי</h1>
     <p class="subtitle">מעקב אישי · סדר הש״ס</p>
-    <div class="header-divider">✦ ✦ ✦</div>
+    <div class="header-date">
+      <span id="hebrewDate">…</span>
+      <span class="header-date-sep">·</span>
+      <span id="sunsetInfo"></span>
+    </div>
+    <div class="header-divider">◆ ◆ ◆</div>
   </header>
 
   <div class="global-card">
     <div class="global-top">
-      <span class="global-label">✨ התקדמות כללית</span>
+      <span class="global-label">התקדמות כללית</span>
       <span class="global-pct" id="globalPct">0%</span>
     </div>
     <div class="progress-bar-wrap">
@@ -544,7 +609,7 @@
 
   <div class="days-container" id="daysContainer"></div>
 
-  <footer style="text-align:center; margin-top:32px; color:#3a5878; font-size:0.78rem; letter-spacing:0.06em; direction:ltr;">
+  <footer style="text-align:center; margin-top:32px; color:#c8bca8; font-size:0.78rem; letter-spacing:0.06em; direction:ltr;">
     © Greg u.
   </footer>
 </div>
@@ -758,6 +823,120 @@ function resetAll()   {
   state.checked.clear(); state.bookmark=null; state.openDays.clear();
   saveState(); render();
 }
+
+// ── DATE HÉBRAÏQUE — Jérusalem fixe ──
+const JERUSALEM = { lat: 31.7683, lon: 35.2137, tz: 'Asia/Jerusalem' };
+
+function calcSunset(date, lat, lon) {
+  const rad = Math.PI / 180;
+  const n = Math.floor((Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000) - Math.floor(Date.UTC(2000,0,1)/86400000) + 1);
+  const L = (280.460 + 0.9856474 * n) % 360;
+  const g = (357.528 + 0.9856003 * n) % 360;
+  const lambda = L + 1.915 * Math.sin(g * rad) + 0.020 * Math.sin(2 * g * rad);
+  const epsilon = 23.439 - 0.0000004 * n;
+  const sinDec = Math.sin(epsilon * rad) * Math.sin(lambda * rad);
+  const dec = Math.asin(sinDec) / rad;
+  const cosH = (Math.cos(90.833 * rad) - Math.sin(lat * rad) * Math.sin(dec * rad)) / (Math.cos(lat * rad) * Math.cos(dec * rad));
+  if (cosH < -1 || cosH > 1) return null;
+  const H = Math.acos(cosH) / rad;
+  const RA = Math.atan2(Math.cos(epsilon * rad) * Math.sin(lambda * rad), Math.cos(lambda * rad)) / rad / 15;
+  const meanSolarNoon = 12 - lon / 15;
+  const EoT = (L - RA + 180) % 360 - 180;
+  return meanSolarNoon + H / 15 - EoT / 60; // UTC decimal hours
+}
+
+function getSunsetUTC(dateLocal) {
+  const sunset = calcSunset(dateLocal, JERUSALEM.lat, JERUSALEM.lon);
+  if (sunset === null) return null;
+  const h = Math.floor(sunset);
+  const m = Math.round((sunset - h) * 60);
+  return Date.UTC(dateLocal.getFullYear(), dateLocal.getMonth(), dateLocal.getDate(), h, m);
+}
+
+const HEB_DAYS = ['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ז׳','ח׳','ט׳','י׳','י״א','י״ב','י״ג','י״ד','ט״ו','ט״ז','י״ז','י״ח','י״ט','כ׳','כ״א','כ״ב','כ״ג','כ״ד','כ״ה','כ״ו','כ״ז','כ״ח','כ״ט','ל׳'];
+
+function hebrewLeap(y) { return ((7*y+1)%19)<7; }
+
+function hebrewNewYear(year) {
+  let ny = Math.floor(347997.5 + 6.5 + (year-1)*365.24682220);
+  const wd = (ny+1)%7;
+  if (wd===0||wd===3||wd===5) ny++;
+  return ny;
+}
+
+function jdnToHebrew(jd) {
+  jd = Math.floor(jd);
+  let year = Math.floor((jd-347997.5)*98496.0/35975351.0);
+  while (hebrewNewYear(year+1)<=jd) year++;
+  while (hebrewNewYear(year)>jd) year--;
+  const startOfYear = hebrewNewYear(year);
+  const isLeap = hebrewLeap(year);
+  const months = isLeap ? [30,29,29,29,30,30,29,30,29,30,29,30,29] : [30,29,29,29,30,29,29,30,29,30,29,30,29];
+  const daysInYear = hebrewNewYear(year+1)-hebrewNewYear(year);
+  if (daysInYear%10===3) months[2]=30;
+  if (daysInYear%10===5) months[1]=30;
+  let dayOfYear = jd-startOfYear+1;
+  let month=0;
+  while (month<months.length && dayOfYear>months[month]) { dayOfYear-=months[month]; month++; }
+  return { year, month, day: dayOfYear, isLeap };
+}
+
+function gregToJDN(year, month, day) {
+  const a=Math.floor((14-month)/12), y=year+4800-a, m=month+12*a-3;
+  return day+Math.floor((153*m+2)/5)+365*y+Math.floor(y/4)-Math.floor(y/100)+Math.floor(y/400)-32045;
+}
+
+function toHebrewYear(year) {
+  const y=year%1000;
+  const h=['','ק','ר','ש','ת','תק','תר','תש','תת','תתק'];
+  const t=['','י','כ','ל','מ','נ','ס','ע','פ','צ'];
+  const u=['','א','ב','ג','ד','ה','ו','ז','ח','ט'];
+  let str=h[Math.floor(y/100)]+t[Math.floor((y%100)/10)]+u[y%10];
+  str=str.replace('יה','ט״ו').replace('יו','ט״ז');
+  if (str.length>1) str=str.slice(0,-1)+'״'+str.slice(-1);
+  else if (str.length===1) str+='׳';
+  return str;
+}
+
+function formatHebrewDate(h) {
+  const norm=['תשרי','חשון','כסלו','טבת','שבט','אדר','ניסן','אייר','סיון','תמוז','אב','אלול'];
+  const leap=['תשרי','חשון','כסלו','טבת','שבט','אדר א׳','אדר ב׳','ניסן','אייר','סיון','תמוז','אב','אלול'];
+  const mName = (h.isLeap ? leap : norm)[h.month] || '?';
+  return `${HEB_DAYS[h.day-1]} ${mName} ${toHebrewYear(h.year)}`;
+}
+
+let _dateTimer = null;
+function updateDateDisplay() {
+  const now = new Date();
+  const todayLocal = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const sunsetUTC = getSunsetUTC(todayLocal);
+  const afterSunset = sunsetUTC && now.getTime() >= sunsetUTC;
+
+  const gregDate = afterSunset
+    ? new Date(todayLocal.getFullYear(), todayLocal.getMonth(), todayLocal.getDate()+1)
+    : todayLocal;
+
+  const jdn = gregToJDN(gregDate.getFullYear(), gregDate.getMonth()+1, gregDate.getDate());
+  const hDate = jdnToHebrew(jdn);
+  document.getElementById('hebrewDate').textContent = formatHebrewDate(hDate);
+
+  if (sunsetUTC) {
+    let sunsetStr;
+    try {
+      sunsetStr = new Date(sunsetUTC).toLocaleTimeString('he-IL', { timeZone: JERUSALEM.tz, hour:'2-digit', minute:'2-digit' });
+    } catch(e) { sunsetStr = '?'; }
+    document.getElementById('sunsetInfo').textContent =
+      afterSunset ? `שקיעה: ${sunsetStr} · לאחר השקיעה ✓` : `שקיעה בירושלים: ${sunsetStr}`;
+  }
+
+  if (_dateTimer) clearTimeout(_dateTimer);
+  const msUntilSunset = sunsetUTC ? sunsetUTC - Date.now() : 0;
+  if (msUntilSunset > 0 && msUntilSunset < 86400000)
+    _dateTimer = setTimeout(updateDateDisplay, msUntilSunset + 500);
+  setTimeout(updateDateDisplay, 60000);
+}
+
+updateDateDisplay();
 
 loadState();
 render();
