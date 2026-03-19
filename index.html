@@ -79,7 +79,7 @@
   /* ── HEADER ── */
   .site-header {
     text-align: center;
-    padding: 32px 16px 24px;
+    padding: 16px 16px 8px;
   }
 
   /* Big decorative Hebrew letter ש as ornament */
@@ -824,85 +824,106 @@ function resetAll()   {
   saveState(); render();
 }
 
-// ── DATE HÉBRAÏQUE — Jérusalem fixe ──
+// ── DATE HÉBRAÏQUE — algorithme local (Reingold & Dershowitz) ──
 const JERUSALEM = { lat: 31.7683, lon: 35.2137, tz: 'Asia/Jerusalem' };
 
-function calcSunset(date, lat, lon) {
+// Coucher du soleil à Jérusalem (UTC ms)
+function getSunsetUTC(dateLocal) {
   const rad = Math.PI / 180;
-  const n = Math.floor((Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000) - Math.floor(Date.UTC(2000,0,1)/86400000) + 1);
-  const L = (280.460 + 0.9856474 * n) % 360;
-  const g = (357.528 + 0.9856003 * n) % 360;
-  const lambda = L + 1.915 * Math.sin(g * rad) + 0.020 * Math.sin(2 * g * rad);
-  const epsilon = 23.439 - 0.0000004 * n;
-  const sinDec = Math.sin(epsilon * rad) * Math.sin(lambda * rad);
-  const dec = Math.asin(sinDec) / rad;
-  const cosH = (Math.cos(90.833 * rad) - Math.sin(lat * rad) * Math.sin(dec * rad)) / (Math.cos(lat * rad) * Math.cos(dec * rad));
+  const lat = JERUSALEM.lat, lon = JERUSALEM.lon;
+  const Y = dateLocal.getFullYear(), M = dateLocal.getMonth()+1, D = dateLocal.getDate();
+  const n = Math.floor(Date.UTC(Y,M-1,D)/86400000) - Math.floor(Date.UTC(2000,0,1)/86400000) + 1;
+  const L = ((280.460 + 0.9856474*n) % 360 + 360) % 360;
+  const g = ((357.528 + 0.9856003*n) % 360 + 360) % 360;
+  const lam = L + 1.915*Math.sin(g*rad) + 0.020*Math.sin(2*g*rad);
+  const eps = 23.439 - 0.0000004*n;
+  const dec = Math.asin(Math.sin(eps*rad)*Math.sin(lam*rad)) / rad;
+  const cosH = (Math.cos(90.833*rad) - Math.sin(lat*rad)*Math.sin(dec*rad)) / (Math.cos(lat*rad)*Math.cos(dec*rad));
   if (cosH < -1 || cosH > 1) return null;
   const H = Math.acos(cosH) / rad;
-  const RA = Math.atan2(Math.cos(epsilon * rad) * Math.sin(lambda * rad), Math.cos(lambda * rad)) / rad / 15;
-  const meanSolarNoon = 12 - lon / 15;
-  const EoT = (L - RA + 180) % 360 - 180;
-  return meanSolarNoon + H / 15 - EoT / 60; // UTC decimal hours
+  const RA = Math.atan2(Math.cos(eps*rad)*Math.sin(lam*rad), Math.cos(lam*rad)) / rad / 15;
+  const EoT = ((L - RA + 180) % 360) - 180;
+  const sunsetUTC = 12 - lon/15 + H/15 - EoT/60; // heures UTC décimales
+  const hh = Math.floor(sunsetUTC), mm = Math.round((sunsetUTC-hh)*60);
+  return Date.UTC(Y, M-1, D, hh, mm);
 }
 
-function getSunsetUTC(dateLocal) {
-  const sunset = calcSunset(dateLocal, JERUSALEM.lat, JERUSALEM.lon);
-  if (sunset === null) return null;
-  const h = Math.floor(sunset);
-  const m = Math.round((sunset - h) * 60);
-  return Date.UTC(dateLocal.getFullYear(), dateLocal.getMonth(), dateLocal.getDate(), h, m);
+// Calendrier hébreu — basé sur epoch fixe calibrée
+// JDN du 1er Tishri 1 = 347998 (proleptic Julian)
+function isHebrewLeap(y) { return ((7*y+1) % 19) < 7; }
+
+function hebrewElapsedDays(year) {
+  const monthsElapsed = Math.floor((235*year - 234) / 19);
+  const parts = 12084 + 13753 * monthsElapsed;
+  let day = monthsElapsed*29 + Math.floor(parts/25920);
+  if ((3*(day+1)) % 7 < 3) day++;
+  return day;
+}
+
+function hebrewNewYear(year) {
+  const ny = hebrewElapsedDays(year);
+  const ny1 = hebrewElapsedDays(year+1);
+  const daysInYear = ny1 - ny;
+  // dehiyyot
+  let result = ny;
+  if (daysInYear === 356) result++;
+  if (daysInYear === 382) result++;
+  return result + 347998; // JDN
+}
+
+function gregToJDN(y, m, d) {
+  const a = Math.floor((14-m)/12), yy = y+4800-a, mm = m+12*a-3;
+  return d + Math.floor((153*mm+2)/5) + 365*yy + Math.floor(yy/4) - Math.floor(yy/100) + Math.floor(yy/400) - 32045;
+}
+
+function jdnToHebrew(jd) {
+  // Estimation de l'année
+  let year = Math.floor((jd - 347998) / 365.2468) + 1;
+  while (hebrewNewYear(year+1) <= jd) year++;
+  while (hebrewNewYear(year)   >  jd) year--;
+
+  const startOfYear = hebrewNewYear(year);
+  const isLeap = isHebrewLeap(year);
+  const daysInYear = hebrewNewYear(year+1) - hebrewNewYear(year);
+
+  // Longueur des mois : Tishri(0)=30, Cheshvan(1)=29ou30, Kislev(2)=29ou30, Tevet(3)=29...
+  const months = isLeap
+    ? [30, 29, 30, 29, 30, 29, 30, 29, 30, 29, 30, 29, 29]
+    : [30, 29, 30, 29, 30, 29, 30, 29, 30, 29, 30, 29];
+
+  // Ajustements Cheshvan / Kislev selon la longueur de l'année
+  if (daysInYear % 10 === 5) months[1] = 30; // Cheshvan shalem
+  if (daysInYear % 10 === 3) months[2] = 29; // Kislev chaser
+
+  let dayOfYear = jd - startOfYear + 1;
+  let month = 0;
+  while (month < months.length && dayOfYear > months[month]) {
+    dayOfYear -= months[month];
+    month++;
+  }
+  return { year, month, day: dayOfYear, isLeap };
 }
 
 const HEB_DAYS = ['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ז׳','ח׳','ט׳','י׳','י״א','י״ב','י״ג','י״ד','ט״ו','ט״ז','י״ז','י״ח','י״ט','כ׳','כ״א','כ״ב','כ״ג','כ״ד','כ״ה','כ״ו','כ״ז','כ״ח','כ״ט','ל׳'];
 
-function hebrewLeap(y) { return ((7*y+1)%19)<7; }
-
-function hebrewNewYear(year) {
-  let ny = Math.floor(347997.5 + 6.5 + (year-1)*365.24682220);
-  const wd = (ny+1)%7;
-  if (wd===0||wd===3||wd===5) ny++;
-  return ny;
-}
-
-function jdnToHebrew(jd) {
-  jd = Math.floor(jd);
-  let year = Math.floor((jd-347997.5)*98496.0/35975351.0);
-  while (hebrewNewYear(year+1)<=jd) year++;
-  while (hebrewNewYear(year)>jd) year--;
-  const startOfYear = hebrewNewYear(year);
-  const isLeap = hebrewLeap(year);
-  const months = isLeap ? [30,29,29,29,30,30,29,30,29,30,29,30,29] : [30,29,29,29,30,29,29,30,29,30,29,30,29];
-  const daysInYear = hebrewNewYear(year+1)-hebrewNewYear(year);
-  if (daysInYear%10===3) months[2]=30;
-  if (daysInYear%10===5) months[1]=30;
-  let dayOfYear = jd-startOfYear+1;
-  let month=0;
-  while (month<months.length && dayOfYear>months[month]) { dayOfYear-=months[month]; month++; }
-  return { year, month, day: dayOfYear, isLeap };
-}
-
-function gregToJDN(year, month, day) {
-  const a=Math.floor((14-month)/12), y=year+4800-a, m=month+12*a-3;
-  return day+Math.floor((153*m+2)/5)+365*y+Math.floor(y/4)-Math.floor(y/100)+Math.floor(y/400)-32045;
+function formatHebrewDate(h) {
+  const norm = ['תשרי','חשון','כסלו','טבת','שבט','אדר','ניסן','אייר','סיון','תמוז','אב','אלול'];
+  const leap = ['תשרי','חשון','כסלו','טבת','שבט','אדר א׳','אדר ב׳','ניסן','אייר','סיון','תמוז','אב','אלול'];
+  const mName = (h.isLeap ? leap : norm)[h.month] || '?';
+  const dayStr = HEB_DAYS[h.day - 1] || String(h.day);
+  return `${dayStr} ${mName} ${toHebrewYear(h.year)}`;
 }
 
 function toHebrewYear(year) {
-  const y=year%1000;
-  const h=['','ק','ר','ש','ת','תק','תר','תש','תת','תתק'];
-  const t=['','י','כ','ל','מ','נ','ס','ע','פ','צ'];
-  const u=['','א','ב','ג','ד','ה','ו','ז','ח','ט'];
-  let str=h[Math.floor(y/100)]+t[Math.floor((y%100)/10)]+u[y%10];
-  str=str.replace('יה','ט״ו').replace('יו','ט״ז');
-  if (str.length>1) str=str.slice(0,-1)+'״'+str.slice(-1);
-  else if (str.length===1) str+='׳';
+  const y = year % 1000;
+  const h = ['','ק','ר','ש','ת','תק','תר','תש','תת','תתק'];
+  const t = ['','י','כ','ל','מ','נ','ס','ע','פ','צ'];
+  const u = ['','א','ב','ג','ד','ה','ו','ז','ח','ט'];
+  let str = h[Math.floor(y/100)] + t[Math.floor((y%100)/10)] + u[y%10];
+  str = str.replace('יה','ט״ו').replace('יו','ט״ז');
+  if (str.length > 1) str = str.slice(0,-1) + '״' + str.slice(-1);
+  else if (str.length === 1) str += '׳';
   return str;
-}
-
-function formatHebrewDate(h) {
-  const norm=['תשרי','חשון','כסלו','טבת','שבט','אדר','ניסן','אייר','סיון','תמוז','אב','אלול'];
-  const leap=['תשרי','חשון','כסלו','טבת','שבט','אדר א׳','אדר ב׳','ניסן','אייר','סיון','תמוז','אב','אלול'];
-  const mName = (h.isLeap ? leap : norm)[h.month] || '?';
-  return `${HEB_DAYS[h.day-1]} ${mName} ${toHebrewYear(h.year)}`;
 }
 
 let _dateTimer = null;
@@ -926,14 +947,17 @@ function updateDateDisplay() {
       sunsetStr = new Date(sunsetUTC).toLocaleTimeString('he-IL', { timeZone: JERUSALEM.tz, hour:'2-digit', minute:'2-digit' });
     } catch(e) { sunsetStr = '?'; }
     document.getElementById('sunsetInfo').textContent =
-      afterSunset ? `שקיעה: ${sunsetStr} · לאחר השקיעה ✓` : `שקיעה בירושלים: ${sunsetStr}`;
+      afterSunset ? `שקיעה: ${sunsetStr} · לאחר השקיעה ✓` : `שקיעה: ${sunsetStr}`;
   }
 
   if (_dateTimer) clearTimeout(_dateTimer);
-  const msUntilSunset = sunsetUTC ? sunsetUTC - Date.now() : 0;
-  if (msUntilSunset > 0 && msUntilSunset < 86400000)
-    _dateTimer = setTimeout(updateDateDisplay, msUntilSunset + 500);
-  setTimeout(updateDateDisplay, 60000);
+  if (sunsetUTC) {
+    const ms = sunsetUTC - Date.now();
+    if (ms > 0 && ms < 86400000) _dateTimer = setTimeout(updateDateDisplay, ms + 1000);
+  }
+  // Rafraîchir à minuit
+  const msTillMidnight = new Date(todayLocal.getFullYear(), todayLocal.getMonth(), todayLocal.getDate()+1) - now;
+  setTimeout(updateDateDisplay, msTillMidnight + 1000);
 }
 
 updateDateDisplay();
