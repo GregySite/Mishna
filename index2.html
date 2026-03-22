@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>לימוד משנה יומי</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Secular+One&family=Noto+Serif+Hebrew:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:         #f7f3ee;
+    --bg2:        #efe9e0;
+    --card:       #ffffff;
+    --card-hover: #fdfaf6;
+    --border:     #e0d5c5;
+    --border-acc: #c8a96e;
+    --gold:       #b5832a;
+    --gold-light: #d4a84b;
+    --gold-pale:  #f5ecd8;
+    --ink:        #1a1208;
+    --ink-mid:    #4a3c28;
+    --ink-dim:    #9a8a72;
+    --ink-faint:  #c8bca8;
+    --green:      #8b5e2a;
+    --green-bg:   #f5ede0;
+    --green-brd:  #d4a870;
+    --red:        #b03030;
+    --red-bg:     #fdf0f0;
+    --accent:     #3a6ea8;
+    --accent-bg:  #f5ede0;
+    --shadow-sm:  0 1px 4px rgba(90,65,30,0.08);
+    --shadow-md:  0 3px 12px rgba(90,65,30,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Serif Hebrew', 'Frank Ruhl Libre', serif;
+    background-color: var(--bg);
+    background-image:
+      radial-gradient(ellipse at 50% 0%, rgba(181,131,42,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 90% 100%, rgba(58,110,168,0.06) 0%, transparent 50%);
+    min-height: 100vh;
+    padding: 20px 16px 40px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Subtle stars — visible but light against cream */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 12%, rgba(181,131,42,0.55) 0%, transparent 100%),
+      radial-gradient(1px 1px at 22% 6%,  rgba(181,131,42,0.4)  0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 38% 20%, rgba(181,131,42,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 53% 4%,  rgba(181,131,42,0.35) 0%, transparent 100%),
+      radial-gradient(1px 1px at 68% 16%, rgba(181,131,42,0.55) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 80% 9%, rgba(181,131,42,0.45) 0%, transparent 100%),
+      radial-gradient(1px 1px at 91% 23%, rgba(181,131,42,0.4)  0%, transparent 100%),
+      radial-gradient(1px 1px at 6%  38%, rgba(181,131,42,0.3)  0%, transparent 100%),
+      radial-gradient(1px 1px at 14% 52%, rgba(181,131,42,0.35) 0%, transparent 100%),
+      radial-gradient(1px 1px at 87% 48%, rgba(181,131,42,0.4)  0%, transparent 100%),
+      radial-gradient(1px 1px at 94% 68%, rgba(181,131,42,0.3)  0%, transparent 100%),
+      radial-gradient(1px 1px at 28% 73%, rgba(181,131,42,0.25) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 58% 83%, rgba(181,131,42,0.35) 0%, transparent 100%),
+      radial-gradient(1px 1px at 74% 90%, rgba(181,131,42,0.3)  0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-wrapper {
+    max-width: 820px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    text-align: center;
+    padding: 16px 16px 8px;
+  }
+
+  /* Big decorative Hebrew letter ש as ornament */
+  .header-ornament {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 3.6rem;
+    font-weight: 900;
+    color: var(--gold-light);
+    opacity: 0.18;
+    display: block;
+    line-height: 1;
+    margin-bottom: -18px;
+    letter-spacing: 0;
+    user-select: none;
+  }
+
+  .site-header h1 {
+    font-family: 'Secular One', sans-serif;
+    font-size: clamp(1.7rem, 5vw, 2.6rem);
+    color: var(--ink);
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+    position: relative;
+  }
+
+  .site-header .subtitle {
+    font-size: 0.9rem;
+    color: var(--ink-dim);
+    letter-spacing: 0.1em;
+  }
+
+  .header-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 18px 0 0;
+    color: var(--gold);
+    font-size: 0.75rem;
+    opacity: 0.6;
+  }
+  .header-divider::before, .header-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-acc), transparent);
+  }
+
+  /* ── GLOBAL CARD ── */
+  .global-card {
+    background: var(--card);
+    border: 1px solid var(--border-acc);
+    border-radius: 16px;
+    padding: 18px 22px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* decorative corner aleph */
+  .global-card::before {
+    content: 'א';
+    position: absolute;
+    left: 12px; top: 4px;
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--gold-light);
+    opacity: 0.07;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .global-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+
+  .global-label {
+    font-family: 'Secular One', sans-serif;
+    font-size: 0.95rem;
+    color: var(--ink-mid);
+    flex-shrink: 0;
+  }
+
+  .global-pct {
+    font-family: 'Secular One', sans-serif;
+    font-size: 1.5rem;
+    color: var(--green);
+    margin-right: auto;
+    font-weight: 700;
+  }
+
+  .progress-bar-wrap {
+    width: 100%;
+    height: 12px;
+    background: var(--bg2);
+    border-radius: 100px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, #6b4420, var(--green));
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+    position: relative;
+  }
+
+  .progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 2px; left: 4px; right: 4px; height: 3px;
+    background: rgba(255,255,255,0.35);
+    border-radius: 100px;
+  }
+
+  .global-stats {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    margin-top: 8px;
+  }
+
+  /* ── CONTROLS ── */
+  .controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn {
+    font-family: 'Noto Serif Hebrew', serif;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--ink-mid);
+    transition: all 0.18s;
+    box-shadow: var(--shadow-sm);
+    white-space: nowrap;
+  }
+
+  .btn:hover {
+    border-color: var(--border-acc);
+    color: var(--gold);
+    background: var(--gold-pale);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .btn-danger { color: var(--red); border-color: rgba(176,48,48,0.25); }
+  .btn-danger:hover { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+
+  /* ── DAY CARDS ── */
+  .days-container { display: flex; flex-direction: column; gap: 8px; }
+
+  .day-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .day-card:hover { border-color: var(--border-acc); box-shadow: var(--shadow-md); }
+
+  .day-card.completed {
+    background: var(--green-bg);
+    border-color: var(--green-brd);
+  }
+
+  .day-card.bookmarked {
+    border-color: var(--gold-light);
+    box-shadow: 0 0 0 2px rgba(181,131,42,0.15), var(--shadow-md);
+  }
+
+  /* ── DAY HEADER ── */
+  .day-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 14px;
+    cursor: pointer;
+    user-select: none;
+    width: 100%;
+  }
+
+  .day-header:hover { background: rgba(181,131,42,0.03); }
+
+  .day-num {
+    font-family: 'Secular One', sans-serif;
+    font-size: 0.95rem;
+    color: var(--card);
+    background: var(--gold);
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+
+  .day-card.completed .day-num {
+    background: var(--green);
+  }
+
+  .day-info {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .day-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    line-height: 1.3;
+  }
+
+  .day-masechtos-preview {
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .bookmark-badge {
+    font-size: 0.62rem;
+    background: var(--gold-pale);
+    color: var(--gold);
+    border: 1px solid rgba(181,131,42,0.35);
+    border-radius: 100px;
+    padding: 1px 7px;
+    white-space: nowrap;
+    font-weight: 600;
+  }
+
+  .day-pct {
+    font-family: 'Secular One', sans-serif;
+    font-size: 0.8rem;
+    color: var(--ink-dim);
+    flex-shrink: 0;
+    min-width: 32px;
+    text-align: center;
+  }
+
+  .day-bar-wrap {
+    width: 56px;
+    height: 6px;
+    background: var(--bg2);
+    border-radius: 100px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .day-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, #6b4420, var(--green));
+    transition: width 0.4s ease;
+  }
+
+  .day-cb {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    border: 2px solid var(--border-acc);
+    border-radius: 5px;
+    background: white;
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    transition: all 0.2s;
+  }
+
+  .day-cb:checked { background: var(--green); border-color: var(--green); }
+  .day-cb:checked::after {
+    content: '✓';
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    color: white; font-size: 12px; font-weight: bold;
+  }
+
+  .day-cb:indeterminate { background: var(--gold-pale); border-color: var(--gold); }
+  .day-cb:indeterminate::after {
+    content: '—';
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    color: var(--gold); font-size: 11px; font-weight: bold;
+  }
+
+  .bk-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    padding: 2px;
+    opacity: 0.25;
+    transition: opacity 0.2s, transform 0.15s;
+    flex-shrink: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+  }
+  .bk-btn:hover, .bk-btn.active { opacity: 1; }
+  .bk-btn.active { transform: scale(1.2); }
+
+  .chevron {
+    color: var(--ink-faint);
+    font-size: 0.65rem;
+    transition: transform 0.22s;
+    flex-shrink: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+  }
+  .day-card.open .chevron { transform: rotate(180deg); }
+
+  /* ── DAY BODY ── */
+  .day-body {
+    display: none;
+    padding: 4px 14px 16px;
+    border-top: 1px solid var(--border);
+  }
+  .day-card.open .day-body { display: block; }
+
+  /* ── MASEHET ── */
+  .masehet-block { margin-top: 14px; }
+
+  .masehet-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .mas-cb {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border: 2px solid var(--border-acc);
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    transition: all 0.2s;
+  }
+
+  .mas-cb:checked { background: var(--green); border-color: var(--green); }
+  .mas-cb:checked::after {
+    content: '✓';
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    color: white; font-size: 11px;
+  }
+
+  .mas-cb:indeterminate { background: var(--accent-bg); border-color: var(--accent); }
+
+  .mas-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ink);
+    flex: 1;
+  }
+
+  .mas-count {
+    font-size: 0.74rem;
+    color: var(--ink-faint);
+    flex-shrink: 0;
+  }
+
+  .mas-bar-wrap {
+    width: 50px;
+    height: 5px;
+    background: var(--bg2);
+    border-radius: 100px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+  }
+
+  .mas-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, var(--accent), #6aa3d4);
+    transition: width 0.3s ease;
+  }
+
+  /* ── CHAPTERS ── */
+  .chapters-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-right: 26px;
+  }
+
+  .ch-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    min-width: 68px;
+  }
+
+  .ch-item:hover {
+    background: var(--accent-bg);
+    border-color: var(--accent);
+  }
+
+  .ch-item.done {
+    background: var(--green-bg);
+    border-color: var(--green-brd);
+  }
+
+  .ch-item.done .ch-box { background: var(--green); border-color: var(--green); }
+  .ch-item.done .ch-box::after { content: '✓'; color: white; font-size: 10px; }
+  .ch-item.done .ch-lbl { color: var(--green); text-decoration: line-through; text-decoration-color: rgba(45,122,79,0.35); }
+
+  .ch-box {
+    width: 15px;
+    height: 15px;
+    min-width: 15px;
+    border: 1.5px solid var(--border-acc);
+    border-radius: 3px;
+    background: white;
+    flex-shrink: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .ch-lbl {
+    font-size: 0.82rem;
+    color: var(--ink-mid);
+    white-space: nowrap;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg2); }
+  ::-webkit-scrollbar-thumb { background: var(--border-acc); border-radius: 3px; }
+
+  .header-date {
+    font-size: 0.88rem;
+    color: var(--ink-dim);
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .header-date-sep { color: var(--ink-faint); }
+
+  @media (max-width: 480px) {
+    .day-bar-wrap { width: 40px; }
+    .btn { font-size: 0.78rem; padding: 7px 10px; }
+    .date-card { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <header class="site-header">
+    <span class="header-ornament">מ</span>
+    <h1>לימוד משנה יומי</h1>
+    <p class="subtitle">מעקב אישי · סדר הש״ס</p>
+    <div class="header-date">
+      <span id="hebrewDate">…</span>
+      <span class="header-date-sep">·</span>
+      <span id="sunsetInfo"></span>
+    </div>
+    <div class="header-divider">◆ ◆ ◆</div>
+  </header>
+
+  <div class="global-card">
+    <div class="global-top">
+      <span class="global-label">התקדמות כללית</span>
+      <span class="global-pct" id="globalPct">0%</span>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="globalBar" style="width:0%"></div>
+    </div>
+    <div class="global-stats" id="globalStats">0 פרקים מתוך 0</div>
+  </div>
+
+  <div class="controls">
+    <button class="btn" onclick="expandAll()">📖 פתח הכל</button>
+    <button class="btn" onclick="collapseAll()">📕 סגור הכל</button>
+    <button class="btn" onclick="scrollToBookmark()">🔖 עבור לסימניה</button>
+    <button class="btn btn-danger" onclick="resetAll()">↺ איפוס</button>
+  </div>
+
+  <div class="days-container" id="daysContainer"></div>
+
+  <footer style="text-align:center; margin-top:32px; color:#c8bca8; font-size:0.78rem; letter-spacing:0.06em; direction:ltr;">
+    © Greg u.
+  </footer>
+</div>
+
+<script>
+const DAYS_DATA = [
+  { day:1, masechtos:[{name:"ברכות",chapters:[1,2,3,4,5,6,7,8,9]},{name:"פאה",chapters:[1,2,3,4,5,6,7,8]},{name:"דמאי",chapters:[1]}]},
+  { day:2, masechtos:[{name:"דמאי",chapters:[2,3,4,5,6,7]},{name:"כלאים",chapters:[1,2,3,4,5,6,7,8,9]},{name:"שביעית",chapters:[1,2,3]}]},
+  { day:3, masechtos:[{name:"שביעית",chapters:[4,5,6,7,8,9,10]},{name:"תרומות",chapters:[1,2,3,4,5,6,7,8,9,10,11]}]},
+  { day:4, masechtos:[{name:"מעשרות",chapters:[1,2,3,4,5]},{name:"מעשר שני",chapters:[1,2,3,4,5]},{name:"חלה",chapters:[1,2,3,4]},{name:"ערלה",chapters:[1,2,3]},{name:"ביכורים",chapters:[1]}]},
+  { day:5, masechtos:[{name:"ביכורים",chapters:[2,3,4]},{name:"שבת",chapters:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]}]},
+  { day:6, masechtos:[{name:"שבת",chapters:[17,18,19,20,21,22,23,24]},{name:"עירובין",chapters:[1,2,3,4,5,6,7,8,9,10]}]},
+  { day:7, masechtos:[{name:"פסחים",chapters:[1,2,3,4,5,6,7,8,9,10]},{name:"שקלים",chapters:[1,2,3,4,5,6,7,8]}]},
+  { day:8, masechtos:[{name:"יומא",chapters:[1,2,3,4,5,6,7,8]},{name:"סוכה",chapters:[1,2,3,4,5]},{name:"ביצה",chapters:[1,2,3,4,5]}]},
+  { day:9, masechtos:[{name:"ראש השנה",chapters:[1,2,3,4]},{name:"תענית",chapters:[1,2,3,4]},{name:"מגילה",chapters:[1,2,3,4]},{name:"מועד קטן",chapters:[1,2,3]},{name:"חגיגה",chapters:[1,2,3]}]},
+  { day:10, masechtos:[{name:"יבמות",chapters:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]},{name:"כתובות",chapters:[1,2]}]},
+  { day:11, masechtos:[{name:"כתובות",chapters:[3,4,5,6,7,8,9,10,11,12,13]},{name:"נדרים",chapters:[1,2,3,4,5,6,7]}]},
+  { day:12, masechtos:[{name:"נדרים",chapters:[8,9,10,11]},{name:"נזיר",chapters:[1,2,3,4,5,6,7,8,9]},{name:"סוטה",chapters:[1,2,3,4,5]}]},
+  { day:13, masechtos:[{name:"סוטה",chapters:[6,7,8,9]},{name:"גיטין",chapters:[1,2,3,4,5,6,7,8,9]},{name:"קידושין",chapters:[1,2,3,4]},{name:"בבא קמא",chapters:[1]}]},
+  { day:14, masechtos:[{name:"בבא קמא",chapters:[2,3,4,5,6,7,8,9,10]},{name:"בבא מציעא",chapters:[1,2,3,4,5,6,7,8,9]}]},
+  { day:15, masechtos:[{name:"בבא מציעא",chapters:[10]},{name:"בבא בתרא",chapters:[1,2,3,4,5,6,7,8,9,10]},{name:"סנהדרין",chapters:[1,2,3,4,5,6,7]}]},
+  { day:16, masechtos:[{name:"סנהדרין",chapters:[8,9,10,11]},{name:"מכות",chapters:[1,2,3]},{name:"שבועות",chapters:[1,2,3,4,5,6,7,8]},{name:"עדויות",chapters:[1,2,3]}]},
+  { day:17, masechtos:[{name:"עדויות",chapters:[4,5,6,7,8]},{name:"עבודה זרה",chapters:[1,2,3,4,5]},{name:"אבות",chapters:[1,2,3,4,5,6]},{name:"הוריות",chapters:[1,2,3]}]},
+  { day:18, masechtos:[{name:"זבחים",chapters:[1,2,3,4,5,6,7,8,9,10,11,12,13,14]},{name:"מנחות",chapters:[1,2,3,4]}]},
+  { day:19, masechtos:[{name:"מנחות",chapters:[5,6,7,8,9,10,11,12,13]},{name:"חולין",chapters:[1,2,3,4,5,6,7,8,9]}]},
+  { day:20, masechtos:[{name:"חולין",chapters:[10,11,12]},{name:"בכורות",chapters:[1,2,3,4,5,6,7,8,9]},{name:"ערכין",chapters:[1,2,3,4,5,6]}]},
+  { day:21, masechtos:[{name:"ערכין",chapters:[7,8,9]},{name:"תמורה",chapters:[1,2,3,4,5,6,7]},{name:"כריתות",chapters:[1,2,3,4,5,6]},{name:"מעילה",chapters:[1,2]}]},
+  { day:22, masechtos:[{name:"מעילה",chapters:[3,4,5,6]},{name:"תמיד",chapters:[1,2,3,4,5,6,7]},{name:"מידות",chapters:[1,2,3,4,5]},{name:"קינים",chapters:[1,2]}]},
+  { day:23, masechtos:[{name:"קינים",chapters:[3]},{name:"כלים",chapters:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]}]},
+  { day:24, masechtos:[{name:"כלים",chapters:[18,19,20,21,22,23,24,25,26,27,28,29,30]},{name:"אהלות",chapters:[1,2,3,4,5]}]},
+  { day:25, masechtos:[{name:"אהלות",chapters:[6,7,8,9,10,11,12,13,14,15,16,17,18]},{name:"נגעים",chapters:[1,2,3,4,5]}]},
+  { day:26, masechtos:[{name:"נגעים",chapters:[6,7,8,9,10,11,12,13,14]},{name:"פרה",chapters:[1,2,3,4,5,6,7,8,9]}]},
+  { day:27, masechtos:[{name:"פרה",chapters:[10,11,12]},{name:"טהרות",chapters:[1,2,3,4,5,6,7,8,9,10]},{name:"מקואות",chapters:[1,2,3,4,5]}]},
+  { day:28, masechtos:[{name:"מקואות",chapters:[6,7,8,9,10]},{name:"נדה",chapters:[1,2,3,4,5,6,7,8,9,10]},{name:"מכשירין",chapters:[1,2,3]}]},
+  { day:29, masechtos:[{name:"מכשירין",chapters:[4,5,6]},{name:"זבים",chapters:[1,2,3,4,5]},{name:"טבול יום",chapters:[1,2,3,4]},{name:"ידים",chapters:[1,2,3,4]},{name:"עוקצין",chapters:[1,2,3]}]}
+];
+
+let state = { checked: new Set(), bookmark: null, openDays: new Set() };
+
+function saveState() {
+  localStorage.setItem('mishna2_checked', JSON.stringify([...state.checked]));
+  localStorage.setItem('mishna2_bk', state.bookmark !== null ? String(state.bookmark) : '');
+  localStorage.setItem('mishna2_open', JSON.stringify([...state.openDays]));
+}
+
+function loadState() {
+  try {
+    const c = localStorage.getItem('mishna2_checked');
+    if (c) state.checked = new Set(JSON.parse(c));
+    const b = localStorage.getItem('mishna2_bk');
+    state.bookmark = (b !== null && b !== '') ? parseInt(b) : null;
+    const o = localStorage.getItem('mishna2_open');
+    if (o) state.openDays = new Set(JSON.parse(o));
+  } catch(e) {}
+}
+
+function key(di, mn, ch) { return `${di}|${mn}|${ch}`; }
+
+function dayProg(di) {
+  let total=0, done=0;
+  DAYS_DATA[di].masechtos.forEach(m => m.chapters.forEach(ch => {
+    total++;
+    if (state.checked.has(key(di,m.name,ch))) done++;
+  }));
+  return {total, done};
+}
+
+function masProg(di, mn, chs) {
+  let done=0;
+  chs.forEach(ch => { if (state.checked.has(key(di,mn,ch))) done++; });
+  return {total: chs.length, done};
+}
+
+function totalProg() {
+  let total=0, done=0;
+  DAYS_DATA.forEach((d,di) => d.masechtos.forEach(m => m.chapters.forEach(ch => {
+    total++;
+    if (state.checked.has(key(di,m.name,ch))) done++;
+  })));
+  return {total, done};
+}
+
+function updateGlobal() {
+  const g = totalProg();
+  const pct = g.total ? Math.round(g.done/g.total*100) : 0;
+  document.getElementById('globalBar').style.width = pct+'%';
+  document.getElementById('globalPct').textContent = pct+'%';
+  document.getElementById('globalStats').textContent = `${g.done} פרקים מתוך ${g.total}`;
+}
+
+function render() {
+  const container = document.getElementById('daysContainer');
+  container.innerHTML = '';
+
+  DAYS_DATA.forEach((d, di) => {
+    const dp = dayProg(di);
+    const pct = dp.total ? Math.round(dp.done/dp.total*100) : 0;
+    const isOpen = state.openDays.has(di);
+    const isBk = state.bookmark === di;
+    const isDone = dp.done === dp.total;
+
+    const card = document.createElement('div');
+    card.className = ['day-card', isDone?'completed':'', isBk?'bookmarked':'', isOpen?'open':''].filter(Boolean).join(' ');
+    card.id = `dc-${di}`;
+
+    const masPreview = d.masechtos.map(m => m.name).join(' · ');
+
+    card.innerHTML = `
+      <div class="day-header" onclick="toggleDay(${di},event)">
+        <div class="day-num">${d.day}</div>
+        <div class="day-info">
+          <div class="day-label">יום ${d.day}${isBk ? ' <span class="bookmark-badge">🔖 סימניה</span>' : ''}</div>
+          <div class="day-masechtos-preview">${masPreview}</div>
+        </div>
+        <span class="day-pct">${pct}%</span>
+        <div class="day-bar-wrap"><div class="day-bar-fill" style="width:${pct}%"></div></div>
+        <input type="checkbox" class="day-cb" id="dcb-${di}"
+          onclick="stopProp(event)"
+          onchange="toggleDayAll(${di},this.checked)"
+          ${dp.done===dp.total && dp.total>0 ? 'checked' : ''}>
+        <button class="bk-btn ${isBk?'active':''}" onclick="toggleBk(${di},event)">🔖</button>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="day-body">${renderMas(di, d.masechtos)}</div>`;
+
+    container.appendChild(card);
+
+    const cb = document.getElementById(`dcb-${di}`);
+    if (dp.done > 0 && dp.done < dp.total) cb.indeterminate = true;
+  });
+
+  updateGlobal();
+}
+
+function renderMas(di, masechtos) {
+  return masechtos.map(m => {
+    const mp = masProg(di, m.name, m.chapters);
+    const mpct = mp.total ? Math.round(mp.done/mp.total*100) : 0;
+    const safeName = m.name.replace(/\s/g,'_').replace(/['"]/g,'');
+    const chs = m.chapters.map(ch => {
+      const k = key(di,m.name,ch);
+      const done = state.checked.has(k);
+      return `<div class="ch-item ${done?'done':''}" onclick="toggleCh('${k}',${di})">
+        <div class="ch-box">${done?'✓':''}</div>
+        <span class="ch-lbl">פרק ${ch}</span>
+      </div>`;
+    }).join('');
+
+    return `<div class="masehet-block">
+      <div class="masehet-header">
+        <input type="checkbox" class="mas-cb" id="mcb-${di}-${safeName}"
+          ${mp.done===mp.total && mp.total>0 ? 'checked' : ''}
+          onchange="toggleMasAll(${di},'${m.name}',${JSON.stringify(m.chapters)},this.checked)">
+        <span class="mas-name">${m.name}</span>
+        <span class="mas-count">${mp.done}/${mp.total}</span>
+        <div class="mas-bar-wrap"><div class="mas-bar-fill" style="width:${mpct}%"></div></div>
+      </div>
+      <div class="chapters-grid">${chs}</div>
+    </div>`;
+  }).join('');
+}
+
+function stopProp(e) { e.stopPropagation(); }
+
+function toggleCh(k, di) {
+  state.checked.has(k) ? state.checked.delete(k) : state.checked.add(k);
+  state.openDays.add(di);
+  saveState(); render();
+}
+
+function toggleDayAll(di, checked) {
+  DAYS_DATA[di].masechtos.forEach(m => m.chapters.forEach(ch => {
+    checked ? state.checked.add(key(di,m.name,ch)) : state.checked.delete(key(di,m.name,ch));
+  }));
+  state.openDays.add(di);
+  saveState(); render();
+}
+
+function toggleMasAll(di, mn, chs, checked) {
+  chs.forEach(ch => { checked ? state.checked.add(key(di,mn,ch)) : state.checked.delete(key(di,mn,ch)); });
+  state.openDays.add(di);
+  saveState(); render();
+}
+
+function toggleDay(di, e) {
+  if (e && (e.target.tagName==='INPUT' || e.target.tagName==='BUTTON')) return;
+  state.openDays.has(di) ? state.openDays.delete(di) : state.openDays.add(di);
+  saveState(); render();
+}
+
+function toggleBk(di, e) {
+  e.stopPropagation();
+  state.bookmark = (state.bookmark===di) ? null : di;
+  saveState(); render();
+}
+
+function scrollToBookmark() {
+  if (state.bookmark===null) { alert('אין סימניה מוגדרת'); return; }
+  state.openDays.add(state.bookmark);
+  saveState(); render();
+  setTimeout(() => {
+    const el = document.getElementById(`dc-${state.bookmark}`);
+    if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 80);
+}
+
+function expandAll()  { DAYS_DATA.forEach((_,i) => state.openDays.add(i)); saveState(); render(); }
+function collapseAll(){ state.openDays.clear(); saveState(); render(); }
+function resetAll()   {
+  if (!confirm('למחוק את כל ההתקדמות?')) return;
+  state.checked.clear(); state.bookmark=null; state.openDays.clear();
+  saveState(); render();
+}
+
+// ── DATE HÉBRAÏQUE — algorithme local (Reingold & Dershowitz) ──
+const JERUSALEM = { lat: 31.7683, lon: 35.2137, tz: 'Asia/Jerusalem' };
+
+// Coucher du soleil à Jérusalem (UTC ms)
+function getSunsetUTC(dateLocal) {
+  const rad = Math.PI / 180;
+  const lat = JERUSALEM.lat, lon = JERUSALEM.lon;
+  const Y = dateLocal.getFullYear(), M = dateLocal.getMonth()+1, D = dateLocal.getDate();
+  const n = Math.floor(Date.UTC(Y,M-1,D)/86400000) - Math.floor(Date.UTC(2000,0,1)/86400000) + 1;
+  const L = ((280.460 + 0.9856474*n) % 360 + 360) % 360;
+  const g = ((357.528 + 0.9856003*n) % 360 + 360) % 360;
+  const lam = L + 1.915*Math.sin(g*rad) + 0.020*Math.sin(2*g*rad);
+  const eps = 23.439 - 0.0000004*n;
+  const dec = Math.asin(Math.sin(eps*rad)*Math.sin(lam*rad)) / rad;
+  const cosH = (Math.cos(90.833*rad) - Math.sin(lat*rad)*Math.sin(dec*rad)) / (Math.cos(lat*rad)*Math.cos(dec*rad));
+  if (cosH < -1 || cosH > 1) return null;
+  const H = Math.acos(cosH) / rad;
+  const RA = Math.atan2(Math.cos(eps*rad)*Math.sin(lam*rad), Math.cos(lam*rad)) / rad / 15;
+  const EoT = ((L - RA + 180) % 360) - 180;
+  const sunsetUTC = 12 - lon/15 + H/15 - EoT/60; // heures UTC décimales
+  const hh = Math.floor(sunsetUTC), mm = Math.round((sunsetUTC-hh)*60);
+  return Date.UTC(Y, M-1, D, hh, mm);
+}
+
+// Calendrier hébreu — basé sur epoch fixe calibrée
+// JDN du 1er Tishri 1 = 347998 (proleptic Julian)
+function isHebrewLeap(y) { return ((7*y+1) % 19) < 7; }
+
+function hebrewElapsedDays(year) {
+  const monthsElapsed = Math.floor((235*year - 234) / 19);
+  const parts = 12084 + 13753 * monthsElapsed;
+  let day = monthsElapsed*29 + Math.floor(parts/25920);
+  if ((3*(day+1)) % 7 < 3) day++;
+  return day;
+}
+
+function hebrewNewYear(year) {
+  const ny = hebrewElapsedDays(year);
+  const ny1 = hebrewElapsedDays(year+1);
+  const daysInYear = ny1 - ny;
+  // dehiyyot
+  let result = ny;
+  if (daysInYear === 356) result++;
+  if (daysInYear === 382) result++;
+  return result + 347998; // JDN
+}
+
+function gregToJDN(y, m, d) {
+  const a = Math.floor((14-m)/12), yy = y+4800-a, mm = m+12*a-3;
+  return d + Math.floor((153*mm+2)/5) + 365*yy + Math.floor(yy/4) - Math.floor(yy/100) + Math.floor(yy/400) - 32045;
+}
+
+function jdnToHebrew(jd) {
+  // Estimation de l'année
+  let year = Math.floor((jd - 347998) / 365.2468) + 1;
+  while (hebrewNewYear(year+1) <= jd) year++;
+  while (hebrewNewYear(year)   >  jd) year--;
+
+  const startOfYear = hebrewNewYear(year);
+  const isLeap = isHebrewLeap(year);
+  const daysInYear = hebrewNewYear(year+1) - hebrewNewYear(year);
+
+  // Longueur des mois : Tishri(0)=30, Cheshvan(1)=29ou30, Kislev(2)=29ou30, Tevet(3)=29...
+  const months = isLeap
+    ? [30, 29, 30, 29, 30, 29, 30, 29, 30, 29, 30, 29, 29]
+    : [30, 29, 30, 29, 30, 29, 30, 29, 30, 29, 30, 29];
+
+  // Ajustements Cheshvan / Kislev selon la longueur de l'année
+  if (daysInYear % 10 === 5) months[1] = 30; // Cheshvan shalem
+  if (daysInYear % 10 === 3) months[2] = 29; // Kislev chaser
+
+  let dayOfYear = jd - startOfYear + 1;
+  let month = 0;
+  while (month < months.length && dayOfYear > months[month]) {
+    dayOfYear -= months[month];
+    month++;
+  }
+  return { year, month, day: dayOfYear, isLeap };
+}
+
+const HEB_DAYS = ['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ז׳','ח׳','ט׳','י׳','י״א','י״ב','י״ג','י״ד','ט״ו','ט״ז','י״ז','י״ח','י״ט','כ׳','כ״א','כ״ב','כ״ג','כ״ד','כ״ה','כ״ו','כ״ז','כ״ח','כ״ט','ל׳'];
+
+function formatHebrewDate(h) {
+  const norm = ['תשרי','חשון','כסלו','טבת','שבט','אדר','ניסן','אייר','סיון','תמוז','אב','אלול'];
+  const leap = ['תשרי','חשון','כסלו','טבת','שבט','אדר א׳','אדר ב׳','ניסן','אייר','סיון','תמוז','אב','אלול'];
+  const mName = (h.isLeap ? leap : norm)[h.month] || '?';
+  const dayStr = HEB_DAYS[h.day - 1] || String(h.day);
+  return `${dayStr} ${mName} ${toHebrewYear(h.year)}`;
+}
+
+function toHebrewYear(year) {
+  const y = year % 1000;
+  const h = ['','ק','ר','ש','ת','תק','תר','תש','תת','תתק'];
+  const t = ['','י','כ','ל','מ','נ','ס','ע','פ','צ'];
+  const u = ['','א','ב','ג','ד','ה','ו','ז','ח','ט'];
+  let str = h[Math.floor(y/100)] + t[Math.floor((y%100)/10)] + u[y%10];
+  str = str.replace('יה','ט״ו').replace('יו','ט״ז');
+  if (str.length > 1) str = str.slice(0,-1) + '״' + str.slice(-1);
+  else if (str.length === 1) str += '׳';
+  return str;
+}
+
+let _dateTimer = null;
+function updateDateDisplay() {
+  const now = new Date();
+  const todayLocal = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const sunsetUTC = getSunsetUTC(todayLocal);
+  const afterSunset = sunsetUTC && now.getTime() >= sunsetUTC;
+
+  const gregDate = afterSunset
+    ? new Date(todayLocal.getFullYear(), todayLocal.getMonth(), todayLocal.getDate()+1)
+    : todayLocal;
+
+  const jdn = gregToJDN(gregDate.getFullYear(), gregDate.getMonth()+1, gregDate.getDate());
+  const hDate = jdnToHebrew(jdn);
+  document.getElementById('hebrewDate').textContent = formatHebrewDate(hDate);
+
+  if (sunsetUTC) {
+    // Calcul manuel heure Jérusalem (UTC+2 hiver, UTC+3 été)
+    // On détecte l'heure d'été israélienne : dernier vendredi avant le 2 avril → dernier dimanche d'octobre
+    function isIsraeliDST(d) {
+      const y = d.getUTCFullYear();
+      // Début DST : dernier vendredi avant le 2 avril
+      const aprilStart = new Date(Date.UTC(y, 3, 1)); // 1er avril
+      let dstStart = new Date(aprilStart);
+      while (dstStart.getUTCDay() !== 5) dstStart.setUTCDate(dstStart.getUTCDate() - 1);
+      // Fin DST : dernier dimanche d'octobre
+      const oct31 = new Date(Date.UTC(y, 9, 31));
+      let dstEnd = new Date(oct31);
+      while (dstEnd.getUTCDay() !== 0) dstEnd.setUTCDate(dstEnd.getUTCDate() - 1);
+      return d >= dstStart && d < dstEnd;
+    }
+    const sunsetDate = new Date(sunsetUTC);
+    const offset = isIsraeliDST(sunsetDate) ? 3 : 2; // UTC+3 ou UTC+2
+    const localMs = sunsetUTC + offset * 3600000;
+    const localDate = new Date(localMs);
+    const hh = String(localDate.getUTCHours()).padStart(2,'0');
+    const mm = String(localDate.getUTCMinutes()).padStart(2,'0');
+    const sunsetStr = `${hh}:${mm}`;
+    document.getElementById('sunsetInfo').textContent =
+      afterSunset ? `שקיעה: ${sunsetStr} · לאחר השקיעה ✓` : `שקיעה: ${sunsetStr}`;
+  }
+
+  if (_dateTimer) clearTimeout(_dateTimer);
+  if (sunsetUTC) {
+    const ms = sunsetUTC - Date.now();
+    if (ms > 0 && ms < 86400000) _dateTimer = setTimeout(updateDateDisplay, ms + 1000);
+  }
+  // Rafraîchir à minuit
+  const msTillMidnight = new Date(todayLocal.getFullYear(), todayLocal.getMonth(), todayLocal.getDate()+1) - now;
+  setTimeout(updateDateDisplay, msTillMidnight + 1000);
+}
+
+updateDateDisplay();
+
+loadState();
+render();
+</script>
+</body>
+</html>
