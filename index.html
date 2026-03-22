@@ -829,23 +829,43 @@ const JERUSALEM = { lat: 31.7683, lon: 35.2137, tz: 'Asia/Jerusalem' };
 
 // Coucher du soleil à Jérusalem (UTC ms)
 function getSunsetUTC(dateLocal) {
-  const rad = Math.PI / 180;
-  const lat = JERUSALEM.lat, lon = JERUSALEM.lon;
+  const rad = Math.PI/180, deg = 180/Math.PI;
+  const lat = 31.7683, lon = 35.2137, elev = 800; // Jérusalem ~800m
   const Y = dateLocal.getFullYear(), M = dateLocal.getMonth()+1, D = dateLocal.getDate();
-  const n = Math.floor(Date.UTC(Y,M-1,D)/86400000) - Math.floor(Date.UTC(2000,0,1)/86400000) + 1;
-  const L = ((280.460 + 0.9856474*n) % 360 + 360) % 360;
-  const g = ((357.528 + 0.9856003*n) % 360 + 360) % 360;
-  const lam = L + 1.915*Math.sin(g*rad) + 0.020*Math.sin(2*g*rad);
-  const eps = 23.439 - 0.0000004*n;
-  const dec = Math.asin(Math.sin(eps*rad)*Math.sin(lam*rad)) / rad;
-  const cosH = (Math.cos(90.833*rad) - Math.sin(lat*rad)*Math.sin(dec*rad)) / (Math.cos(lat*rad)*Math.cos(dec*rad));
-  if (cosH < -1 || cosH > 1) return null;
-  const H = Math.acos(cosH) / rad;
-  const RA = Math.atan2(Math.cos(eps*rad)*Math.sin(lam*rad), Math.cos(lam*rad)) / rad / 15;
-  const EoT = ((L - RA + 180) % 360) - 180;
-  const sunsetUTC = 12 - lon/15 + H/15 - EoT/60; // heures UTC décimales
-  const hh = Math.floor(sunsetUTC), mm = Math.round((sunsetUTC-hh)*60);
-  return Date.UTC(Y, M-1, D, hh, mm);
+  // JDN
+  const a=Math.floor((14-M)/12), yy=Y+4800-a, mm=M+12*a-3;
+  const jdn=D+Math.floor((153*mm+2)/5)+365*yy+Math.floor(yy/4)-Math.floor(yy/100)+Math.floor(yy/400)-32045;
+  const jd = jdn + 0.5;
+  const t = (jd - 2451545.0) / 36525.0;
+  // Longitude géométrique moyenne
+  const l0 = (280.46646 + t*(36000.76983 + t*0.0003032)) % 360;
+  // Anomalie moyenne
+  const m0 = (357.52911 + t*(35999.05029 - t*0.0001537)) % 360;
+  // Équation du centre
+  const c = Math.sin(m0*rad)*(1.914602 - t*(0.004817 + 0.000014*t))
+          + Math.sin(2*m0*rad)*(0.019993 - 0.000101*t)
+          + Math.sin(3*m0*rad)*0.000289;
+  const suntl = l0 + c;
+  const omega = 125.04 - 1934.136*t;
+  const sunAl = suntl - 0.00569 - 0.00478*Math.sin(omega*rad);
+  const e0 = 23.0 + (26.0 + (21.448 - t*(46.8150 + t*(0.00059 - t*0.001813)))/60)/60;
+  const e = e0 + 0.00256*Math.cos(omega*rad);
+  const decl = Math.asin(Math.sin(e*rad)*Math.sin(sunAl*rad))*deg;
+  const rl0 = l0*rad, re = e*rad;
+  const y2 = Math.tan(re/2)**2;
+  const EoT = 4*deg*(y2*Math.sin(2*rl0) - 2*0.016708634*Math.sin(m0*rad)
+    + 4*0.016708634*y2*Math.sin(m0*rad)*Math.cos(2*rl0)
+    - 0.5*y2**2*Math.sin(4*rl0) - 1.25*0.016708634**2*Math.sin(2*m0*rad));
+  // Correction d'élévation (dépression géométrique + réfraction)
+  const elevCorr = -Math.sqrt(2*elev/6371000)*deg;
+  const cosHA = (Math.cos((90.833 - elevCorr)*rad) - Math.sin(lat*rad)*Math.sin(decl*rad))
+              / (Math.cos(lat*rad)*Math.cos(decl*rad));
+  if (cosHA < -1 || cosHA > 1) return null;
+  const HA = Math.acos(cosHA)*deg;
+  // Minutes UTC depuis minuit
+  const sunsetMin = 720 - 4*lon - EoT + HA*4;
+  const hh = Math.floor(sunsetMin/60), sunMm = Math.round(sunsetMin%60);
+  return Date.UTC(Y, M-1, D, hh, sunMm);
 }
 
 // Calendrier hébreu — basé sur epoch fixe calibrée
@@ -942,10 +962,27 @@ function updateDateDisplay() {
   document.getElementById('hebrewDate').textContent = formatHebrewDate(hDate);
 
   if (sunsetUTC) {
-    let sunsetStr;
-    try {
-      sunsetStr = new Date(sunsetUTC).toLocaleTimeString('he-IL', { timeZone: JERUSALEM.tz, hour:'2-digit', minute:'2-digit' });
-    } catch(e) { sunsetStr = '?'; }
+    // Calcul manuel heure Jérusalem (UTC+2 hiver, UTC+3 été)
+    // On détecte l'heure d'été israélienne : dernier vendredi avant le 2 avril → dernier dimanche d'octobre
+    function isIsraeliDST(d) {
+      const y = d.getUTCFullYear();
+      // Début DST : dernier vendredi avant le 2 avril
+      const aprilStart = new Date(Date.UTC(y, 3, 1)); // 1er avril
+      let dstStart = new Date(aprilStart);
+      while (dstStart.getUTCDay() !== 5) dstStart.setUTCDate(dstStart.getUTCDate() - 1);
+      // Fin DST : dernier dimanche d'octobre
+      const oct31 = new Date(Date.UTC(y, 9, 31));
+      let dstEnd = new Date(oct31);
+      while (dstEnd.getUTCDay() !== 0) dstEnd.setUTCDate(dstEnd.getUTCDate() - 1);
+      return d >= dstStart && d < dstEnd;
+    }
+    const sunsetDate = new Date(sunsetUTC);
+    const offset = isIsraeliDST(sunsetDate) ? 3 : 2; // UTC+3 ou UTC+2
+    const localMs = sunsetUTC + offset * 3600000;
+    const localDate = new Date(localMs);
+    const hh = String(localDate.getUTCHours()).padStart(2,'0');
+    const mm = String(localDate.getUTCMinutes()).padStart(2,'0');
+    const sunsetStr = `${hh}:${mm}`;
     document.getElementById('sunsetInfo').textContent =
       afterSunset ? `שקיעה: ${sunsetStr} · לאחר השקיעה ✓` : `שקיעה: ${sunsetStr}`;
   }
