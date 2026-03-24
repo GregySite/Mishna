@@ -572,6 +572,22 @@
     font-size: 0.72rem;
   }
 
+  /* ── ANIMATION COMPLÉTION ── */
+  @keyframes confettiFall {
+    0%   { transform: translate(0,0) rotate(0deg) scale(1); opacity: 1; }
+    100% { transform: translate(var(--cx), var(--cy)) rotate(var(--cr)) scale(0.5); opacity: 0; }
+  }
+
+  .confetti-piece {
+    position: fixed;
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 9999;
+    animation: confettiFall 1.8s ease-out forwards;
+  }
+
   /* ── SCROLLBAR ── */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--bg2); }
@@ -832,12 +848,38 @@ function renderMas(di, masechtos) {
   }).join('');
 }
 
+function celebrateDay(di) {
+  const card = document.getElementById(`dc-${di}`);
+  if (!card) return;
+
+  // Confettis qui partent depuis la carte
+  const rect = card.getBoundingClientRect();
+  const colors = ['#b5832a','#d4a84b','#f5ecd8','#8b5e2a','#fff0c0','#c8a96e'];
+  for (let i = 0; i < 26; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.background = colors[i % colors.length];
+    el.style.left = (rect.left + Math.random() * rect.width) + 'px';
+    el.style.top  = (rect.top + Math.random() * rect.height * 0.5) + 'px';
+    const angle = -Math.PI/2 + (Math.random()-0.5) * Math.PI * 1.8;
+    const dist  = 100 + Math.random() * 160;
+    el.style.setProperty('--cx', Math.cos(angle)*dist + 'px');
+    el.style.setProperty('--cy', Math.sin(angle)*dist + 'px');
+    el.style.setProperty('--cr', (Math.random()*540) + 'deg');
+    el.style.animationDelay = (Math.random() * 0.35) + 's';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 2200);
+  }
+}
+
 function stopProp(e) { e.stopPropagation(); }
 
 function toggleCh(k, di) {
   state.checked.has(k) ? state.checked.delete(k) : state.checked.add(k);
   state.openDays.add(di);
   saveState(); render();
+  const dp = dayProg(di);
+  if (dp.done === dp.total) setTimeout(() => celebrateDay(di), 50);
 }
 
 function toggleDayAll(di, checked) {
@@ -846,12 +888,15 @@ function toggleDayAll(di, checked) {
   }));
   state.openDays.add(di);
   saveState(); render();
+  if (checked) setTimeout(() => celebrateDay(di), 50);
 }
 
 function toggleMasAll(di, mn, chs, checked) {
   chs.forEach(ch => { checked ? state.checked.add(key(di,mn,ch)) : state.checked.delete(key(di,mn,ch)); });
   state.openDays.add(di);
   saveState(); render();
+  const dp = dayProg(di);
+  if (dp.done === dp.total) setTimeout(() => celebrateDay(di), 50);
 }
 
 function toggleDay(di, e) {
