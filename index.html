@@ -549,6 +549,29 @@
     white-space: nowrap;
   }
 
+  /* ── TODAY + SÉDER ── */
+  .day-card.today {
+    border-color: var(--border-acc);
+    box-shadow: 0 0 0 2px rgba(181,131,42,0.2), var(--shadow-md);
+  }
+
+  .today-badge {
+    font-size: 0.65rem;
+    background: var(--gold);
+    color: white;
+    border-radius: 100px;
+    padding: 1px 7px;
+    white-space: nowrap;
+    font-weight: 600;
+    font-family: 'Secular One', sans-serif;
+  }
+
+  .seder-tag {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 0.72rem;
+  }
+
   /* ── SCROLLBAR ── */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--bg2); }
@@ -694,15 +717,50 @@ function totalProg() {
 
 function updateGlobal() {
   const g = totalProg();
-  const pct = g.total ? Math.round(g.done/g.total*100) : 0;
+  const pct = g.total ? Math.floor(g.done/g.total*100) : 0;
   document.getElementById('globalBar').style.width = pct+'%';
   document.getElementById('globalPct').textContent = pct+'%';
   document.getElementById('globalStats').textContent = `${g.done} פרקים מתוך ${g.total}`;
 }
 
+// ── SÉDARIM ──
+const SEDARIM = [
+  { name: 'זרעים', days: [1,2,3,4] },
+  { name: 'מועד',  days: [5,6,7,8,9] },
+  { name: 'נשים',  days: [10,11,12,13] },
+  { name: 'נזיקין',days: [14,15,16,17] },
+  { name: 'קדשים', days: [18,19,20,21,22] },
+  { name: 'טהרות', days: [23,24,25,26,27,28,29] },
+];
+function getSeder(dayNum) {
+  const s = SEDARIM.find(s => s.days.includes(dayNum));
+  return s ? s.name : '';
+}
+
+// ── JOUR HÉBREU ACTUEL (index dans DAYS_DATA) ──
+// On utilise la progression : le 1er jour non complété = jour actuel
+function getTodayDayIndex() {
+  // Récupérer le jour du mois hébreu actuel depuis l'affichage déjà calculé
+  // On relit le JDN du jour courant (même logique que updateDateDisplay)
+  const now = new Date();
+  const todayLocal = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const sunsetUTC = getSunsetUTC(todayLocal);
+  const afterSunset = sunsetUTC && now.getTime() >= sunsetUTC;
+  const gregDate = afterSunset
+    ? new Date(todayLocal.getFullYear(), todayLocal.getMonth(), todayLocal.getDate()+1)
+    : todayLocal;
+  const jdn = gregToJDN(gregDate.getFullYear(), gregDate.getMonth()+1, gregDate.getDate());
+  const hDate = jdnToHebrew(jdn);
+  // Jour du mois, plafonné à 29
+  const dayOfMonth = Math.min(hDate.day, 29);
+  return dayOfMonth - 1; // index 0-based
+}
+
 function render() {
   const container = document.getElementById('daysContainer');
   container.innerHTML = '';
+
+  const todayIdx = getTodayDayIndex();
 
   DAYS_DATA.forEach((d, di) => {
     const dp = dayProg(di);
@@ -710,9 +768,11 @@ function render() {
     const isOpen = state.openDays.has(di);
     const isBk = state.bookmark === di;
     const isDone = dp.done === dp.total;
+    const isToday = di === todayIdx;
+    const seder = getSeder(d.day);
 
     const card = document.createElement('div');
-    card.className = ['day-card', isDone?'completed':'', isBk?'bookmarked':'', isOpen?'open':''].filter(Boolean).join(' ');
+    card.className = ['day-card', isDone?'completed':'', isBk?'bookmarked':'', isOpen?'open':'', isToday?'today':''].filter(Boolean).join(' ');
     card.id = `dc-${di}`;
 
     const masPreview = d.masechtos.map(m => m.name).join(' · ');
@@ -721,8 +781,8 @@ function render() {
       <div class="day-header" onclick="toggleDay(${di},event)">
         <div class="day-num">${d.day}</div>
         <div class="day-info">
-          <div class="day-label">יום ${d.day}${isBk ? ' <span class="bookmark-badge">🔖 סימניה</span>' : ''}</div>
-          <div class="day-masechtos-preview">${masPreview}</div>
+          <div class="day-label">יום ${d.day}${isToday ? ' <span class="today-badge">היום ◀</span>' : ''}${isBk ? ' <span class="bookmark-badge">🔖 סימניה</span>' : ''}</div>
+          <div class="day-masechtos-preview"><span class="seder-tag">${seder}</span> · ${masPreview}</div>
         </div>
         <span class="day-pct">${pct}%</span>
         <div class="day-bar-wrap"><div class="day-bar-fill" style="width:${pct}%"></div></div>
