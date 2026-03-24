@@ -717,7 +717,7 @@ function totalProg() {
 
 function updateGlobal() {
   const g = totalProg();
-  const pct = g.total ? Math.round(g.done/g.total*100) : 0;
+  const pct = g.total ? Math.floor(g.done/g.total*100) : 0;
   document.getElementById('globalBar').style.width = pct+'%';
   document.getElementById('globalPct').textContent = pct+'%';
   document.getElementById('globalStats').textContent = `${g.done} פרקים מתוך ${g.total}`;
