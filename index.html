@@ -79,7 +79,7 @@
   /* ── HEADER ── */
   .site-header {
     text-align: center;
-    padding: 16px 16px 8px;
+    padding: 4px 16px 8px;
   }
 
   /* Big decorative Hebrew letter ש as ornament */
@@ -566,6 +566,10 @@
     font-family: 'Secular One', sans-serif;
   }
 
+  .day-seder-line {
+    margin-top: 1px;
+  }
+
   .seder-tag {
     color: var(--gold);
     font-weight: 700;
@@ -798,7 +802,8 @@ function render() {
         <div class="day-num">${d.day}</div>
         <div class="day-info">
           <div class="day-label">יום ${d.day}${isToday ? ' <span class="today-badge">היום ◀</span>' : ''}${isBk ? ' <span class="bookmark-badge">🔖 סימניה</span>' : ''}</div>
-          <div class="day-masechtos-preview"><span class="seder-tag">${seder}</span> · ${masPreview}</div>
+          <div class="day-seder-line"><span class="seder-tag">${seder}</span></div>
+          <div class="day-masechtos-preview">${masPreview}</div>
         </div>
         <span class="day-pct">${pct}%</span>
         <div class="day-bar-wrap"><div class="day-bar-fill" style="width:${pct}%"></div></div>
