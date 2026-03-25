@@ -3,58 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Ouverture Application</title>
+    <title>Test Ouverture App - V2</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
+            padding: 20px;
             background-color: #f4f4f9;
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-            padding: 0 20px;
         }
         .app-button {
             display: inline-block;
-            padding: 16px 32px;
-            font-size: 18px;
+            padding: 15px 25px;
+            font-size: 16px;
             font-weight: bold;
             color: white;
-            background-color: #007bff;
             text-decoration: none;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-top: 20px;
-        }
-        .app-button:active {
-            background-color: #0056b3;
-        }
-        .warning {
-            margin-top: 30px;
-            color: #666;
-            font-size: 14px;
+            margin: 15px 0;
+            width: 80%;
             text-align: center;
-            padding: 0 20px;
         }
+        .btn-1 { background-color: #28a745; }
+        .btn-2 { background-color: #007bff; }
+        .btn-3 { background-color: #dc3545; }
+        p.desc { font-size: 14px; color: #555; text-align: center; margin-top: -5px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
-    <h1>Test du lien d'intention</h1>
-    
-    <a href="intent://#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=com.nocker.kehati;end" class="app-button">
-        Ouvrir Kehati
-    </a>
+    <h2>Tests de contournement du Store</h2>
 
-    <p class="warning">
-        ⚠️ <b>Rappel :</b> Ce bouton ne fonctionnera que si cette page est ouverte depuis un navigateur Android (comme Chrome) et que l'application est déjà installée sur le téléphone.
-    </p>
+    <a href="intent://#Intent;package=com.nocker.kehati;end" class="app-button btn-1">
+        Test 1 : Intent Simplifié
+    </a>
+    <p class="desc">Laisse Android choisir la meilleure façon d'ouvrir l'app sans spécifier "l'action".</p>
+
+    <a href="intent://#Intent;package=com.nocker.kehati;S.browser_fallback_url=https://www.google.fr;end" class="app-button btn-2">
+        Test 2 : Anti-Store
+    </a>
+    <p class="desc">Si ça échoue, ça ouvrira Google.fr au lieu du Play Store. Si Google s'ouvre, cela prouve que le navigateur refuse de "voir" l'application installée.</p>
+
+    <a href="android-app://com.nocker.kehati/" class="app-button btn-3">
+        Test 3 : Format direct
+    </a>
+    <p class="desc">Une ancienne méthode parfois encore supportée par certains navigateurs.</p>
 
 </body>
 </html>
