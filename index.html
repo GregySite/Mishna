@@ -549,6 +549,96 @@
     white-space: nowrap;
   }
 
+  /* ── MODAL SEFARIA ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26,18,8,0.6);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal-box {
+    background: var(--card);
+    border: 1px solid var(--border-acc);
+    border-radius: 16px;
+    padding: 22px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-md);
+    position: relative;
+  }
+
+  .modal-title {
+    font-family: 'Secular One', sans-serif;
+    font-size: 1.1rem;
+    color: var(--ink);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: var(--ink-faint);
+    padding: 0 4px;
+  }
+
+  .mishna-text {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: var(--ink);
+    direction: rtl;
+    text-align: right;
+  }
+
+  .mishna-text .mishna-item {
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mishna-text .mishna-item:last-child { border-bottom: none; }
+
+  .mishna-item-num {
+    font-family: 'Secular One', sans-serif;
+    font-size: 0.75rem;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .modal-loading {
+    text-align: center;
+    color: var(--ink-dim);
+    padding: 30px;
+    font-size: 0.9rem;
+  }
+
+  .ch-read-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.75rem;
+    color: var(--accent);
+    padding: 0 4px;
+    opacity: 0.6;
+    transition: opacity 0.15s;
+    flex-shrink: 0;
+  }
+  .ch-read-btn:hover { opacity: 1; }
+
   /* ── TODAY + SÉDER ── */
   .day-card.today {
     border-color: var(--border-acc);
@@ -574,6 +664,19 @@
     color: var(--gold);
     font-weight: 700;
     font-size: 0.72rem;
+  }
+
+  /* ── CERCLE SVG SÉDARIM ── */
+  .seder-circle-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 18px 0 10px;
+  }
+
+  #sederSVG {
+    width: 220px;
+    height: 220px;
+    filter: drop-shadow(0 2px 8px rgba(90,65,30,0.12));
   }
 
   /* ── ANIMATION COMPLÉTION ── */
@@ -640,6 +743,24 @@
     <div class="progress-bar-wrap">
       <div class="progress-bar-fill" id="globalBar" style="width:0%"></div>
     </div>
+
+    <!-- Cercle SVG des Sédarim -->
+    <div class="seder-circle-wrap">
+      <svg id="sederSVG" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+        <!-- Cercle de fond -->
+        <circle cx="130" cy="130" r="100" fill="#f7f3ee" stroke="#e0d5c5" stroke-width="1"/>
+        <!-- Séparations et arcs générés par JS -->
+        <g id="sederArcs"></g>
+        <g id="sederLabels"></g>
+        <!-- Anneau intérieur décoratif -->
+        <circle cx="130" cy="130" r="52" fill="#f7f3ee" stroke="#e0d5c5" stroke-width="1"/>
+        <!-- Texte central -->
+        <text x="130" y="122" text-anchor="middle" font-family="Secular One, sans-serif" font-size="11" fill="#4a3c28">לוח</text>
+        <text x="130" y="137" text-anchor="middle" font-family="Secular One, sans-serif" font-size="10" fill="#b5832a" id="svgPct">0%</text>
+        <text x="130" y="150" text-anchor="middle" font-family="Frank Ruhl Libre, serif" font-size="8.5" fill="#9a8a72">פרקים</text>
+      </svg>
+    </div>
+
     <div class="global-stats" id="globalStats">0 פרקים מתוך 0</div>
   </div>
 
@@ -647,10 +768,24 @@
     <button class="btn" onclick="expandAll()">📖 פתח הכל</button>
     <button class="btn" onclick="collapseAll()">📕 סגור הכל</button>
     <button class="btn" onclick="scrollToBookmark()">🔖 עבור לסימניה</button>
+    <button class="btn" onclick="openKehati()">📚 כהתי</button>
     <button class="btn btn-danger" onclick="resetAll()">↺ איפוס</button>
   </div>
 
   <div class="days-container" id="daysContainer"></div>
+
+  <!-- Modal Sefaria -->
+  <div class="modal-overlay" id="seferiaModal" onclick="closeModal(event)">
+    <div class="modal-box">
+      <div class="modal-title">
+        <span id="modalTitle">—</span>
+        <button class="modal-close" onclick="document.getElementById('seferiaModal').classList.remove('open')">✕</button>
+      </div>
+      <div id="modalContent" class="mishna-text">
+        <div class="modal-loading">טוען...</div>
+      </div>
+    </div>
+  </div>
 
   <footer style="text-align:center; margin-top:32px; color:#c8bca8; font-size:0.78rem; letter-spacing:0.06em; direction:ltr;">
     © Greg u.
@@ -735,12 +870,116 @@ function totalProg() {
   return {total, done};
 }
 
+// ── CERCLE SVG SÉDARIM ──
+const SEDER_DATA = [
+  { name:'זרעים',  total:72,  days:[1,2,3,4] },
+  { name:'מועד',   total:91,  days:[5,6,7,8,9] },
+  { name:'נשים',   total:72,  days:[10,11,12,13] },
+  { name:'נזיקין', total:73,  days:[14,15,16,17] },
+  { name:'קדשים',  total:90,  days:[18,19,20,21,22] },
+  { name:'טהרות',  total:127, days:[23,24,25,26,27,28,29] },
+];
+const TOTAL_PERAKIM = 525;
+const CX = 130, CY = 130, R_OUT = 100, R_IN = 56, R_LABEL = 114;
+const GAP_DEG = 1.5; // espace entre secteurs en degrés
+
+function polarToXY(cx, cy, r, angleDeg) {
+  const a = (angleDeg - 90) * Math.PI / 180;
+  return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+}
+
+function arcPath(cx, cy, rOut, rIn, startDeg, endDeg) {
+  const s1 = polarToXY(cx, cy, rOut, startDeg);
+  const e1 = polarToXY(cx, cy, rOut, endDeg);
+  const s2 = polarToXY(cx, cy, rIn, endDeg);
+  const e2 = polarToXY(cx, cy, rIn, startDeg);
+  const large = (endDeg - startDeg) > 180 ? 1 : 0;
+  return `M${s1.x},${s1.y} A${rOut},${rOut} 0 ${large} 1 ${e1.x},${e1.y} L${s2.x},${s2.y} A${rIn},${rIn} 0 ${large} 0 ${e2.x},${e2.y} Z`;
+}
+
+function getSederDone(seder) {
+  let done = 0;
+  seder.days.forEach(d => {
+    const di = d - 1;
+    DAYS_DATA[di].masechtos.forEach(m => m.chapters.forEach(ch => {
+      if (state.checked.has(key(di, m.name, ch))) done++;
+    }));
+  });
+  return done;
+}
+
+function drawSederCircle() {
+  const arcsG   = document.getElementById('sederArcs');
+  const labelsG = document.getElementById('sederLabels');
+  if (!arcsG) return;
+  arcsG.innerHTML = '';
+  labelsG.innerHTML = '';
+
+  let currentAngle = 0;
+
+  SEDER_DATA.forEach((seder, si) => {
+    const sectorDeg = (seder.total / TOTAL_PERAKIM) * 360;
+    const startDeg  = currentAngle + GAP_DEG / 2;
+    const endDeg    = currentAngle + sectorDeg - GAP_DEG / 2;
+    const done      = getSederDone(seder);
+    const fillRatio = seder.total > 0 ? done / seder.total : 0;
+
+    // Arc de fond (gris clair)
+    const bgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    bgPath.setAttribute('d', arcPath(CX, CY, R_OUT, R_IN, startDeg, endDeg));
+    bgPath.setAttribute('fill', '#e8dfd0');
+    bgPath.setAttribute('stroke', '#f7f3ee');
+    bgPath.setAttribute('stroke-width', '0.5');
+    arcsG.appendChild(bgPath);
+
+    // Arc de progression (bronze/doré)
+    if (fillRatio > 0) {
+      const filledDeg = startDeg + (endDeg - startDeg) * fillRatio;
+      const fgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      fgPath.setAttribute('d', arcPath(CX, CY, R_OUT, R_IN, startDeg, filledDeg));
+      // Dégradé : bronze clair → bronze foncé selon avancement
+      const lightness = 0.4 + fillRatio * 0.3;
+      const r = Math.round(181 - fillRatio * 30);
+      const g = Math.round(131 - fillRatio * 20);
+      const b = Math.round(42);
+      fgPath.setAttribute('fill', `rgb(${r},${g},${b})`);
+      fgPath.setAttribute('stroke', '#f7f3ee');
+      fgPath.setAttribute('stroke-width', '0.5');
+      arcsG.appendChild(fgPath);
+    }
+
+    // Label du Séder
+    const midAngle = currentAngle + sectorDeg / 2;
+    const lp = polarToXY(CX, CY, R_LABEL, midAngle);
+    const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    txt.setAttribute('x', lp.x);
+    txt.setAttribute('y', lp.y);
+    txt.setAttribute('text-anchor', 'middle');
+    txt.setAttribute('dominant-baseline', 'middle');
+    txt.setAttribute('font-family', 'Secular One, sans-serif');
+    txt.setAttribute('font-size', '7.5');
+    txt.setAttribute('fill', fillRatio > 0 ? '#8b5e2a' : '#c8bca8');
+    txt.setAttribute('font-weight', fillRatio > 0 ? '700' : '400');
+    txt.textContent = seder.name;
+    labelsG.appendChild(txt);
+
+    currentAngle += sectorDeg;
+  });
+
+  // Pourcentage central
+  const g = totalProg();
+  const pct = g.total ? Math.floor(g.done / g.total * 100) : 0;
+  const svgPct = document.getElementById('svgPct');
+  if (svgPct) svgPct.textContent = pct + '%';
+}
+
 function updateGlobal() {
   const g = totalProg();
   const pct = g.total ? Math.floor(g.done/g.total*100) : 0;
   document.getElementById('globalBar').style.width = pct+'%';
   document.getElementById('globalPct').textContent = pct+'%';
   document.getElementById('globalStats').textContent = `${g.done} פרקים מתוך ${g.total}`;
+  drawSederCircle();
 }
 
 // ── SÉDARIM ──
@@ -836,6 +1075,7 @@ function renderMas(di, masechtos) {
       return `<div class="ch-item ${done?'done':''}" onclick="toggleCh('${k}',${di})">
         <div class="ch-box">${done?'✓':''}</div>
         <span class="ch-lbl">פרק ${ch}</span>
+        <button class="ch-read-btn" onclick="readChapter(event,'${m.name}',${ch})" title="קרא">📖</button>
       </div>`;
     }).join('');
 
@@ -1094,7 +1334,7 @@ function updateDateDisplay() {
     const mm = String(localDate.getUTCMinutes()).padStart(2,'0');
     const sunsetStr = `${hh}:${mm}`;
     document.getElementById('sunsetInfo').textContent =
-      afterSunset ? `שקיעה: ${sunsetStr} · לאחר השקיעה ✓` : `שקיעה: ${sunsetStr}`;
+    afterSunset ? `שקיעה (שעון ישראל): ${sunsetStr} · לאחר השקיעה ✓` : `שקיעה (שעון ישראל): ${sunsetStr}`;
   }
 
   if (_dateTimer) clearTimeout(_dateTimer);
@@ -1108,6 +1348,97 @@ function updateDateDisplay() {
 }
 
 updateDateDisplay();
+
+// ── KEHATI ──
+function openKehati() {
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isAndroid = /Android/.test(navigator.userAgent);
+  if (isAndroid) {
+    // Intent URL — ouvre l'app si installée, sinon redirige vers le Play Store
+    window.location.href = 'intent://open/#Intent;package=com.nocker.kehati;scheme=kehati;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.nocker.kehati;end';
+  } else if (isIOS) {
+    window.open('https://apps.apple.com/il/app/kehati/id1059791961', '_blank');
+  } else {
+    window.open('https://play.google.com/store/apps/details?id=com.nocker.kehati', '_blank');
+  }
+}
+
+// ── SEFARIA ──
+// Mapping noms hébreux → noms Sefaria
+const SEFARIA_NAMES = {
+  'ברכות':'Berakhot','פאה':'Peah','דמאי':'Demai','כלאים':'Kilayim',
+  'שביעית':'Sheviit','תרומות':'Terumot','מעשרות':'Maasrot',
+  'מעשר שני':'Maaser_Sheni','חלה':'Challah','ערלה':'Orlah',
+  'ביכורים':'Bikkurim','שבת':'Shabbat','עירובין':'Eruvin',
+  'פסחים':'Pesachim','שקלים':'Shekalim','יומא':'Yoma',
+  'סוכה':'Sukkah','ביצה':'Beitzah','ראש השנה':'Rosh_Hashanah',
+  'תענית':'Taanit','מגילה':'Megillah','מועד קטן':'Moed_Katan',
+  'חגיגה':'Chagigah','יבמות':'Yevamot','כתובות':'Ketubot',
+  'נדרים':'Nedarim','נזיר':'Nazir','סוטה':'Sotah','גיטין':'Gittin',
+  'קידושין':'Kiddushin','בבא קמא':'Bava_Kamma','בבא מציעא':'Bava_Metzia',
+  'בבא בתרא':'Bava_Batra','סנהדרין':'Sanhedrin','מכות':'Makkot',
+  'שבועות':'Shevuot','עדויות':'Eduyot','עבודה זרה':'Avodah_Zarah',
+  'אבות':'Pirkei_Avot','הוריות':'Horayot','זבחים':'Zevachim',
+  'מנחות':'Menachot','חולין':'Chullin','בכורות':'Bekhorot',
+  'ערכין':'Arakhin','תמורה':'Temurah','כריתות':'Keritot',
+  'מעילה':'Meilah','תמיד':'Tamid','מידות':'Middot','קינים':'Kinnim',
+  'כלים':'Kelim','אהלות':'Ohalot','נגעים':'Negaim','פרה':'Parah',
+  'טהרות':'Tahorot','מקואות':'Mikvaot','נדה':'Niddah',
+  'מכשירין':'Makhshirin','זבים':'Zavim','טבול יום':'Tevul_Yom',
+  'ידים':'Yadayim','עוקצין':'Oktzin'
+};
+
+// On crée une variable globale pour garder une trace de la requête en cours
+let sefariaAbortController = null;
+
+async function readChapter(e, masName, chNum) {
+  e.stopPropagation();
+  const sefName = SEFARIA_NAMES[masName];
+  if (!sefName) { alert('טקסט לא זמין'); return; }
+
+  document.getElementById('modalTitle').textContent = `${masName} · פרק ${chNum}`;
+  document.getElementById('modalContent').innerHTML = '<div class="modal-loading">טוען מ-Sefaria...</div>';
+  document.getElementById('seferiaModal').classList.add('open');
+
+  // Si une requête était déjà en cours, on l'annule !
+  if (sefariaAbortController) {
+    sefariaAbortController.abort();
+  }
+  // On crée un nouveau contrôleur pour cette nouvelle requête
+  sefariaAbortController = new AbortController();
+  const signal = sefariaAbortController.signal;
+
+  try {
+    // On passe le 'signal' au fetch pour qu'il puisse être interrompu
+    const res = await fetch(`https://www.sefaria.org/api/texts/Mishnah_${sefName}.${chNum}?lang=he`, { signal });
+    const data = await res.json();
+    const texts = Array.isArray(data.he) ? data.he : [];
+    if (!texts.length) throw new Error('empty');
+    
+    const html = texts.map((t,i) =>
+      `<div class="mishna-item">
+        <span class="mishna-item-num">משנה ${i+1}</span>
+        ${Array.isArray(t) ? t.join(' ') : t}
+      </div>`
+    ).join('');
+    document.getElementById('modalContent').innerHTML = html;
+    
+  } catch(err) {
+    // Si l'erreur est due à notre annulation (AbortError), on ne fait rien, on laisse la nouvelle requête s'afficher.
+    if (err.name === 'AbortError') {
+      console.log('Requête précédente annulée');
+    } else {
+      // S'il y a un vrai problème de réseau
+      document.getElementById('modalContent').innerHTML =
+        `<div class="modal-loading">לא ניתן לטעון את הטקסט.<br><small>בדוק את החיבור לאינטרנט.</small></div>`;
+    }
+  }
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('seferiaModal'))
+    document.getElementById('seferiaModal').classList.remove('open');
+}
 
 loadState();
 render();
