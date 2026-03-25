@@ -1334,7 +1334,7 @@ function updateDateDisplay() {
     const mm = String(localDate.getUTCMinutes()).padStart(2,'0');
     const sunsetStr = `${hh}:${mm}`;
     document.getElementById('sunsetInfo').textContent =
-      afterSunset ? `שקיעה: ${sunsetStr} · לאחר השקיעה ✓` : `שקיעה: ${sunsetStr}`;
+    afterSunset ? `שקיעה (שעון ישראל): ${sunsetStr} · לאחר השקיעה ✓` : `שקיעה (שעון ישראל): ${sunsetStr}`;
   }
 
   if (_dateTimer) clearTimeout(_dateTimer);
@@ -1389,6 +1389,10 @@ const SEFARIA_NAMES = {
 };
 
 async function readChapter(e, masName, chNum) {
+  // On crée une variable globale pour garder une trace de la requête en cours
+let sefariaAbortController = null;
+
+async function readChapter(e, masName, chNum) {
   e.stopPropagation();
   const sefName = SEFARIA_NAMES[masName];
   if (!sefName) { alert('טקסט לא זמין'); return; }
@@ -1397,11 +1401,21 @@ async function readChapter(e, masName, chNum) {
   document.getElementById('modalContent').innerHTML = '<div class="modal-loading">טוען מ-Sefaria...</div>';
   document.getElementById('seferiaModal').classList.add('open');
 
+  // Si une requête était déjà en cours, on l'annule !
+  if (sefariaAbortController) {
+    sefariaAbortController.abort();
+  }
+  // On crée un nouveau contrôleur pour cette nouvelle requête
+  sefariaAbortController = new AbortController();
+  const signal = sefariaAbortController.signal;
+
   try {
-    const res = await fetch(`https://www.sefaria.org/api/texts/Mishnah_${sefName}.${chNum}?lang=he`);
+    // On passe le 'signal' au fetch pour qu'il puisse être interrompu
+    const res = await fetch(`https://www.sefaria.org/api/texts/Mishnah_${sefName}.${chNum}?lang=he`, { signal });
     const data = await res.json();
     const texts = Array.isArray(data.he) ? data.he : [];
     if (!texts.length) throw new Error('empty');
+    
     const html = texts.map((t,i) =>
       `<div class="mishna-item">
         <span class="mishna-item-num">משנה ${i+1}</span>
@@ -1409,9 +1423,16 @@ async function readChapter(e, masName, chNum) {
       </div>`
     ).join('');
     document.getElementById('modalContent').innerHTML = html;
+    
   } catch(err) {
-    document.getElementById('modalContent').innerHTML =
-      `<div class="modal-loading">לא ניתן לטעון את הטקסט.<br><small>בדוק את החיבור לאינטרנט.</small></div>`;
+    // Si l'erreur est due à notre annulation (AbortError), on ne fait rien, on laisse la nouvelle requête s'afficher.
+    if (err.name === 'AbortError') {
+      console.log('Requête précédente annulée');
+    } else {
+      // S'il y a un vrai problème de réseau
+      document.getElementById('modalContent').innerHTML =
+        `<div class="modal-loading">לא ניתן לטעון את הטקסט.<br><small>בדוק את החיבור לאינטרנט.</small></div>`;
+    }
   }
 }
 
