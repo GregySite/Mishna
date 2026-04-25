@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>לימוד משנה יומי</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23b5832a'/><text x='16' y='23' text-anchor='middle' font-family='serif' font-size='22' font-weight='bold' fill='white'>מ</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Secular+One&family=Noto+Serif+Hebrew:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -640,34 +639,6 @@
   }
   .ch-read-btn:hover { opacity: 1; }
 
-  /* ── AVANCE / RETARD ── */
-  .rhythm-status {
-    text-align: center;
-    margin-top: 8px;
-    font-family: 'Secular One', sans-serif;
-    font-size: 0.82rem;
-    min-height: 18px;
-  }
-
-  .rhythm-ahead {
-    color: #2d7a4f;
-  }
-
-  .rhythm-behind {
-    color: var(--red);
-  }
-
-  .rhythm-ok {
-    color: var(--ink-dim);
-  }
-
-  .rhythm-detail {
-    font-family: 'Noto Serif Hebrew', serif;
-    font-size: 0.74rem;
-    color: var(--ink-faint);
-    margin-top: 2px;
-  }
-
   /* ── TODAY + SÉDER ── */
   .day-card.today {
     border-color: var(--border-acc);
@@ -791,7 +762,6 @@
     </div>
 
     <div class="global-stats" id="globalStats">0 פרקים מתוך 0</div>
-    <div class="rhythm-status" id="rhythmStatus"></div>
   </div>
 
   <div class="controls">
@@ -1010,68 +980,6 @@ function updateGlobal() {
   document.getElementById('globalPct').textContent = pct+'%';
   document.getElementById('globalStats').textContent = `${g.done} פרקים מתוך ${g.total}`;
   drawSederCircle();
-  updateRhythm();
-}
-
-function updateRhythm() {
-  const el = document.getElementById('rhythmStatus');
-  if (!el) return;
-
-  // Jour hébreu actuel (même logique que getTodayDayIndex)
-  const now = new Date();
-  const todayLocal = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const sunsetUTC = getSunsetUTC(todayLocal);
-  const afterSunset = sunsetUTC && now.getTime() >= sunsetUTC;
-  const gregDate = afterSunset
-    ? new Date(todayLocal.getFullYear(), todayLocal.getMonth(), todayLocal.getDate()+1)
-    : todayLocal;
-  const jdn = gregToJDN(gregDate.getFullYear(), gregDate.getMonth()+1, gregDate.getDate());
-  const hDate = jdnToHebrew(jdn);
-  const todayDayNum = Math.min(hDate.day, 29); // jour du mois, plafonné à 29
-
-  // Jours qu'il aurait dû compléter = tous les jours AVANT aujourd'hui
-  const expectedDaysCompleted = todayDayNum - 1; // ex: jour 6 → devrait avoir fini 1-5
-  if (expectedDaysCompleted <= 0) { el.innerHTML = ''; return; }
-
-  // Combien de jours sont réellement complétés à 100% ?
-  let daysCompleted = 0;
-  for (let i = 0; i < DAYS_DATA.length; i++) {
-    const dp = dayProg(i);
-    if (dp.done === dp.total && dp.total > 0) daysCompleted++;
-    else break; // on s'arrête au premier jour non complet (jours consécutifs)
-  }
-
-  const dayDiff = daysCompleted - expectedDaysCompleted;
-
-  // Perakim de retard/avance
-  let perakimDiff = 0;
-  if (dayDiff !== 0) {
-    // Calculer les perakim attendus vs réels
-    let perakimExpected = 0;
-    for (let i = 0; i < expectedDaysCompleted && i < DAYS_DATA.length; i++) {
-      DAYS_DATA[i].masechtos.forEach(m => perakimExpected += m.chapters.length);
-    }
-    let perakimDone = 0;
-    DAYS_DATA.forEach((d, di) => {
-      d.masechtos.forEach(m => m.chapters.forEach(ch => {
-        if (state.checked.has(key(di, m.name, ch))) perakimDone++;
-      }));
-    });
-    perakimDiff = Math.abs(perakimDone - perakimExpected);
-  }
-
-  if (dayDiff === 0) {
-    el.innerHTML = `<div class="rhythm-ok">✓ בקצב המתוכנן</div>`;
-  } else if (dayDiff > 0) {
-    el.innerHTML = `
-      <div class="rhythm-ahead">▲ מקדים ב־${dayDiff} ${dayDiff === 1 ? 'יום' : 'ימים'}</div>
-      ${perakimDiff > 0 ? `<div class="rhythm-detail">(${perakimDiff} פרקים קדימה)</div>` : ''}`;
-  } else {
-    const behind = Math.abs(dayDiff);
-    el.innerHTML = `
-      <div class="rhythm-behind">▼ מאחר ב־${behind} ${behind === 1 ? 'יום' : 'ימים'}</div>
-      ${perakimDiff > 0 ? `<div class="rhythm-detail">(${perakimDiff} פרקים פיגור)</div>` : ''}`;
-  }
 }
 
 // ── SÉDARIM ──
